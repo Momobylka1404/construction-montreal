@@ -867,7 +867,10 @@ section[id] {
   display: flex;
   flex-direction: column;
   width: min(88vw, 370px);
-  padding: 24px;
+  padding:
+  calc(24px + env(safe-area-inset-top, 0px))
+  24px
+  calc(24px + env(safe-area-inset-bottom, 0px));
   background: var(--navy-950);
   color: #ffffff;
   box-shadow: -20px 0 60px rgba(0, 0, 0, 0.35);

@@ -2648,3 +2648,14 @@ section[id] {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* Correction de l'en-tête sur iPhone en mode application installée */
+@supports (padding-top: env(safe-area-inset-top)) {
+  @media (display-mode: standalone) {
+    .site-header {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+  }
+}
+

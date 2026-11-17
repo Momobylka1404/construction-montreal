@@ -8,62 +8,27 @@ import {
   inject,
   signal,
 } from '@angular/core';
-
-export type ServiceCategory = 'all' | 'batiment' | 'exterieur';
-export type ServiceIconKey =
-  | 'construction'
-  | 'renovation'
-  | 'peinture'
-  | 'pavage'
-  | 'jardins'
-  | 'piscine'
-  | 'dechets'
-  | 'paysagement';
-
-export interface ServiceItem {
-  id: string;
-  number: string;
-  title: string;
-  category: Exclude<ServiceCategory, 'all'>;
-  categoryLabel: string;
-  description: string;
-  highlights: readonly string[];
-  image: string;
-  alt: string;
-  icon: ServiceIconKey;
-}
-
-export interface RealisationItem {
-  id: string;
-  title: string;
-  category: Exclude<ServiceCategory, 'all'>;
-  categoryLabel: string;
-  tagline: string;
-  summary: string;
-  beforeImage: string;
-  beforeAlt: string;
-  afterImage: string;
-  afterAlt: string;
-  icon: ServiceIconKey;
-}
-
-export interface ProcessStep {
-  number: string;
-  title: string;
-  description: string;
-}
+import {
+  Lang,
+  ServiceCategory,
+  TRANSLATIONS,
+  TimelineKey,
+} from './translations';
 
 export interface QuoteFormData {
   name: string;
   phone: string;
   email: string;
-  service: string;
+  serviceId: string;
   area: string;
-  timeline: string;
+  timeline: TimelineKey;
   message: string;
 }
 
-export type QuoteFormErrors = Partial<Record<keyof QuoteFormData, string>>;
+export type QuoteErrorField = 'name' | 'phone' | 'email' | 'serviceId' | 'message';
+export type QuoteErrorFlags = Partial<Record<QuoteErrorField, boolean>>;
+
+const LANG_STORAGE_KEY = '180services-lang';
 
 @Component({
   selector: 'app-root',
@@ -87,8 +52,6 @@ export class App {
     phoneHref: 'tel:+15148233467',
     whatsappNumber: '15148233467',
     email: '180servicesenr@gmail.com',
-    addressStreet: '10275 rue Romuald-Trudeau',
-    addressCity: 'Montréal, QC H4N 2X5',
     mapsUrl:
       'https://www.google.com/maps/search/?api=1&query=10275+rue+Romuald-Trudeau+Montreal+QC+H4N+2X5',
     /** Optionnel : collez ici votre endpoint Formspree (ex. 'https://formspree.io/f/xxxx') */
@@ -96,350 +59,11 @@ export class App {
   } as const;
 
   readonly currentYear = 2026;
+  readonly timelineKeys: readonly TimelineKey[] = ['asap', 'month', 'quarter', 'flexible'];
 
-  readonly navItems = [
-    { id: 'accueil', label: 'Accueil' },
-    { id: 'services', label: 'Services' },
-    { id: 'apropos', label: 'À propos' },
-    { id: 'realisations', label: 'Réalisations' },
-    { id: 'contact', label: 'Contact' },
-  ] as const;
-
-  readonly trustPillars = [
-    {
-      title: '8 corps de métier',
-      detail: 'Intérieur et extérieur réunis sous un même toit',
-    },
-    {
-      title: 'Soumission gratuite',
-      detail: 'Estimation claire, détaillée et sans engagement',
-    },
-    {
-      title: 'Interlocuteur unique',
-      detail: 'Un suivi rigoureux du premier appel à la livraison',
-    },
-    {
-      title: 'Ancrage montréalais',
-      detail: 'Basés à Montréal (H4N 2X5) pour intervenir rapidement',
-    },
-  ] as const;
-
-  readonly services: readonly ServiceItem[] = [
-    {
-      id: 'construction',
-      number: '01',
-      title: 'Construction',
-      category: 'batiment',
-      categoryLabel: 'Bâtiment',
-      description:
-        'Des structures solides et durables, réalisées avec rigueur pour concrétiser vos agrandissements et projets résidentiels.',
-      highlights: [
-        'Travaux de structure et agrandissements',
-        'Respect des normes et finitions soignées',
-        'Coordination complète du chantier',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=82&auto=format&fit=crop',
-      alt: 'Plans architecturaux pour projet de construction résidentielle à Montréal',
-      icon: 'construction',
-    },
-    {
-      id: 'renovation',
-      number: '02',
-      title: 'Rénovation',
-      category: 'batiment',
-      categoryLabel: 'Intérieur',
-      description:
-        'Modernisez et valorisez vos espaces de vie : cuisine, salle de bain, sous-sol et réaménagement complet sur mesure.',
-      highlights: [
-        'Cuisines, salles de bain et aires ouvertes',
-        'Mise à niveau esthétique et fonctionnelle',
-        'Chantier propre et délais maîtrisés',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=82&auto=format&fit=crop',
-      alt: 'Intérieur résidentiel moderne entièrement rénové',
-      icon: 'renovation',
-    },
-    {
-      id: 'peinture',
-      number: '03',
-      title: 'Peinture',
-      category: 'batiment',
-      categoryLabel: 'Finition',
-      description:
-        'Préparation minutieuse des surfaces et application uniforme pour des murs, plafonds et boiseries impeccables.',
-      highlights: [
-        'Préparation, tirage de joints et sablage',
-        'Peinture intérieure et extérieure durable',
-        'Protection soignée de votre mobilier',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=900&q=82&auto=format&fit=crop',
-      alt: 'Application soignée de peinture intérieure au rouleau',
-      icon: 'peinture',
-    },
-    {
-      id: 'pavage',
-      number: '04',
-      title: 'Pavage',
-      category: 'exterieur',
-      categoryLabel: 'Extérieur',
-      description:
-        'Conception et réfection d’entrées de garage, allées piétonnes et terrasses en pavé uni adaptées au climat québécois.',
-      highlights: [
-        'Entrées de cour, trottoirs et terrasses',
-        'Fondation compactée contre le gel-dégel',
-        'Bordures nettes et drainage maîtrisé',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1668911494509-14baf3b42fda?w=900&q=82&auto=format&fit=crop',
-      alt: 'Entrée résidentielle pavée avec bordures en pavé uni devant une maison moderne',
-      icon: 'pavage',
-    },
-    {
-      id: 'jardins',
-      number: '05',
-      title: 'Entretien de jardins',
-      category: 'exterieur',
-      categoryLabel: 'Entretien',
-      description:
-        'Tonte, taille de haies, désherbage et soin saisonnier pour profiter d’une propriété verdoyante sans effort.',
-      highlights: [
-        'Tonte régulière et découpage des bordures',
-        'Taille de haies, arbustes et plates-bandes',
-        'Ouverture de printemps et fermeture d’automne',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1458245201577-fc8a130b8829?w=900&q=82&auto=format&fit=crop',
-      alt: 'Tondeuse sur pelouse résidentielle fraîchement entretenue',
-      icon: 'jardins',
-    },
-    {
-      id: 'piscine',
-      number: '06',
-      title: 'Nettoyage de piscine',
-      category: 'exterieur',
-      categoryLabel: 'Entretien',
-      description:
-        'Remise en route, aspiration, nettoyage du bassin et entretien régulier pour une eau limpide toute la saison.',
-      highlights: [
-        'Nettoyage complet du bassin et des parois',
-        'Entretien hebdomadaire ou ponctuel',
-        'Eau claire, saine et prête à la baignade',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1572331165267-854da2b10ccc?w=900&q=82&auto=format&fit=crop',
-      alt: 'Piscine résidentielle propre et cristalline au coucher du soleil',
-      icon: 'piscine',
-    },
-    {
-      id: 'dechets-verts',
-      number: '07',
-      title: 'Déchets verts',
-      category: 'exterieur',
-      categoryLabel: 'Nettoyage',
-      description:
-        'Ramassage rapide des feuilles mortes, branches, résidus de taille et débris de cour pour un terrain net.',
-      highlights: [
-        'Collecte de feuilles, branches et résidus',
-        'Nettoyage complet après tempête ou taille',
-        'Évacuation propre et respectueuse',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1635628001185-d4437faea3e1?w=900&q=82&auto=format&fit=crop',
-      alt: 'Brouette remplie de feuilles mortes lors du nettoyage d’un jardin',
-      icon: 'dechets',
-    },
-    {
-      id: 'paysagement',
-      number: '08',
-      title: 'Aménagement paysager',
-      category: 'exterieur',
-      categoryLabel: 'Extérieur',
-      description:
-        'Création d’espaces extérieurs harmonieux mêlant plantations, terrasses, murets et zones de détente durables.',
-      highlights: [
-        'Design d’espaces extérieurs sur mesure',
-        'Pose de tourbe, plantations et paillis',
-        'Valorisation durable de votre façade et cour',
-      ],
-      image:
-        'https://images.unsplash.com/photo-1755816764913-bd1104a26d78?w=900&q=82&auto=format&fit=crop',
-      alt: 'Cour arrière aménagée avec pergola en bois, terrasse et pelouse soignée',
-      icon: 'paysagement',
-    },
-  ];
-
-  readonly commitments = [
-    {
-      title: 'Polyvalence maîtrisée',
-      description:
-        'De la construction au paysagement, un seul partenaire coordonne vos travaux intérieurs et extérieurs avec cohérence.',
-      icon: 'layers' as const,
-    },
-    {
-      title: 'Devis clair et transparent',
-      description:
-        'Chaque projet débute par une soumission gratuite, détaillée et adaptée à vos objectifs comme à votre budget.',
-      icon: 'shield' as const,
-    },
-    {
-      title: 'Proximité et souci du détail',
-      description:
-        'Établis à Montréal, nous privilégions la ponctualité, la propreté des lieux et des finitions faites pour durer.',
-      icon: 'pin' as const,
-    },
-  ] as const;
-
-  readonly processSteps: readonly ProcessStep[] = [
-    {
-      number: '01',
-      title: 'Prise de contact',
-      description:
-        'Décrivez-nous votre besoin par formulaire, téléphone ou WhatsApp pour planifier un premier échange.',
-    },
-    {
-      number: '02',
-      title: 'Évaluation & soumission',
-      description:
-        'Nous analysons votre projet et vous remettons une soumission gratuite, transparente et sans engagement.',
-    },
-    {
-      number: '03',
-      title: 'Exécution soignée',
-      description:
-        'Nos interventions se déroulent de manière organisée, propre et respectueuse de votre propriété.',
-    },
-    {
-      number: '04',
-      title: 'Vérification finale',
-      description:
-        'Nous passons chaque détail en revue avec vous pour confirmer votre entière satisfaction.',
-    },
-  ];
-
-  readonly realisations: readonly RealisationItem[] = [
-    {
-      id: 'construction',
-      title: 'Construction',
-      category: 'batiment',
-      categoryLabel: 'Bâtiment',
-      tagline: 'Des bâtis solides et durables',
-      summary:
-        'Transformation complète du gros œuvre jusqu’aux façades finies, ouvertures vitrées et revêtements extérieurs.',
-      beforeImage: 'images/construction-avant.jpg',
-      beforeAlt: 'Chantier de construction résidentielle avant finition',
-      afterImage: 'images/construction-apres.jpg',
-      afterAlt: 'Maison résidentielle terminée après travaux de construction',
-      icon: 'construction',
-    },
-    {
-      id: 'renovation',
-      title: 'Rénovation',
-      category: 'batiment',
-      categoryLabel: 'Intérieur',
-      tagline: 'Modernisez vos espaces',
-      summary:
-        'Rénovation intégrale d’une cuisine : armoires contemporaines, îlot central lumineux et revêtements modernisés.',
-      beforeImage: 'images/renovation-avant.jpg',
-      beforeAlt: 'Cuisine résidentielle avant travaux de rénovation',
-      afterImage: 'images/renovation-apres.jpg',
-      afterAlt: 'Cuisine lumineuse et moderne après rénovation complète',
-      icon: 'renovation',
-    },
-    {
-      id: 'peinture',
-      title: 'Peinture',
-      category: 'batiment',
-      categoryLabel: 'Finition',
-      tagline: 'Des finitions impeccables',
-      summary:
-        'Remise en état complète des murs endommagés, préparation lisse et application d’une peinture au rendu net et profond.',
-      beforeImage: 'images/peinture-avant.jpg',
-      beforeAlt: 'Pièce intérieure avant préparation et travaux de peinture',
-      afterImage: 'images/peinture-apres.jpg',
-      afterAlt: 'Pièce intérieure rafraîchie avec peinture murale soignée',
-      icon: 'peinture',
-    },
-    {
-      id: 'pavage',
-      title: 'Pavage',
-      category: 'exterieur',
-      categoryLabel: 'Extérieur',
-      tagline: 'Des surfaces élégantes',
-      summary:
-        'Remplacement d’une allée fissurée par un pavé uni structuré, résistant et parfaitement nivelé.',
-      beforeImage: 'images/pavage-avant.jpg',
-      beforeAlt: 'Allée résidentielle fissurée avant travaux de pavage',
-      afterImage: 'images/pavage-apres.jpg',
-      afterAlt: 'Entrée résidentielle refaite en pavé uni foncé après travaux',
-      icon: 'pavage',
-    },
-    {
-      id: 'jardins',
-      title: 'Entretien de jardins',
-      category: 'exterieur',
-      categoryLabel: 'Entretien',
-      tagline: 'Un extérieur toujours soigné',
-      summary:
-        'Remise au propre complète des haies, massifs et surfaces vertes pour redonner structure et fraîcheur au jardin.',
-      beforeImage: 'images/jardins-avant.jpg',
-      beforeAlt: 'Jardin résidentiel avant taille et entretien',
-      afterImage: 'images/jardins-apres.jpg',
-      afterAlt: 'Jardin résidentiel propre et taillé après entretien',
-      icon: 'jardins',
-    },
-    {
-      id: 'piscine',
-      title: 'Nettoyage de piscine',
-      category: 'exterieur',
-      categoryLabel: 'Entretien',
-      tagline: 'Une eau claire et saine',
-      summary:
-        'Nettoyage en profondeur du bassin et des abords pour retrouver une eau limpide prête à accueillir la belle saison.',
-      beforeImage: 'images/piscine-avant.jpg',
-      beforeAlt: 'Piscine résidentielle avant nettoyage saisonnier',
-      afterImage: 'images/piscine-apres.jpg',
-      afterAlt: 'Piscine propre à l’eau claire après nettoyage complet',
-      icon: 'piscine',
-    },
-    {
-      id: 'dechets-verts',
-      title: 'Déchets verts',
-      category: 'exterieur',
-      categoryLabel: 'Nettoyage',
-      tagline: 'Un espace propre et dégagé',
-      summary:
-        'Dégagement complet des branches, broussailles et déchets végétaux accumulés pour libérer entièrement le terrain.',
-      beforeImage: 'images/dechets-verts-avant.jpg',
-      beforeAlt: 'Terrain encombré de déchets verts avant nettoyage',
-      afterImage: 'images/dechets-verts-apres.jpg',
-      afterAlt: 'Espace extérieur dégagé et propre après évacuation des déchets verts',
-      icon: 'dechets',
-    },
-    {
-      id: 'paysagement',
-      title: 'Aménagement paysager',
-      category: 'exterieur',
-      categoryLabel: 'Extérieur',
-      tagline: 'Un jardin harmonieux',
-      summary:
-        'Réorganisation des espaces extérieurs, plantations équilibrées et finitions soignées pour sublimer la propriété.',
-      beforeImage: 'images/paysagement-avant.jpg',
-      beforeAlt: 'Terrain résidentiel avant aménagement paysager',
-      afterImage: 'images/paysagement-apres.jpg',
-      afterAlt: 'Cour et jardin transformés après aménagement paysager',
-      icon: 'paysagement',
-    },
-  ];
-
-  readonly timelineOptions = [
-    'Dès que possible',
-    'Dans le prochain mois',
-    'Dans 1 à 3 mois',
-    'Planification / Flexible',
-  ] as const;
+  // --- Langue active (FR / EN) ---
+  readonly lang = signal<Lang>('fr');
+  readonly t = computed(() => TRANSLATIONS[this.lang()]);
 
   // --- État réactif (Signals) ---
   readonly mobileMenuOpen = signal(false);
@@ -458,17 +82,17 @@ export class App {
     name: '',
     phone: '',
     email: '',
-    service: '',
+    serviceId: '',
     area: 'Montréal',
-    timeline: 'Dès que possible',
+    timeline: 'asap',
     message: '',
   });
 
-  readonly quoteErrors = signal<QuoteFormErrors>({});
+  readonly quoteErrorFlags = signal<QuoteErrorFlags>({});
   readonly quoteStatus = signal<'idle' | 'submitting' | 'ready' | 'sent' | 'error'>('idle');
-  readonly quoteErrorMessage = signal<string>('');
+  readonly showFallbackAlert = signal<boolean>(false);
   readonly copiedSummary = signal<boolean>(false);
-  readonly preselectedNotice = signal<string>('');
+  readonly preselectedServiceId = signal<string>('');
 
   // --- Glissé de haut en bas pour actualiser (Pull-to-Refresh mobile / PWA) ---
   readonly pullDistance = signal<number>(0);
@@ -483,19 +107,21 @@ export class App {
 
   // --- Sélecteurs dérivés ---
   readonly filteredServices = computed(() => {
+    const all = this.t().services;
     const filter = this.serviceFilter();
     if (filter === 'all') {
-      return this.services;
+      return all;
     }
-    return this.services.filter((item) => item.category === filter);
+    return all.filter((item) => item.category === filter);
   });
 
   readonly filteredRealisations = computed(() => {
+    const all = this.t().realisations;
     const filter = this.realisationFilter();
     if (filter === 'all') {
-      return this.realisations;
+      return all;
     }
-    return this.realisations.filter((item) => item.category === filter);
+    return all.filter((item) => item.category === filter);
   });
 
   readonly activeRealisation = computed(() => {
@@ -503,7 +129,7 @@ export class App {
     if (!id) {
       return null;
     }
-    return this.realisations.find((item) => item.id === id) ?? null;
+    return this.t().realisations.find((item) => item.id === id) ?? null;
   });
 
   readonly activeRealisationIndex = computed(() => {
@@ -511,30 +137,52 @@ export class App {
     if (!id) {
       return -1;
     }
-    return this.realisations.findIndex((item) => item.id === id);
+    return this.t().realisations.findIndex((item) => item.id === id);
+  });
+
+  readonly preselectedServiceLabel = computed(() => {
+    const id = this.preselectedServiceId();
+    if (!id) {
+      return '';
+    }
+    return this.resolveServiceLabel(id);
+  });
+
+  readonly quoteErrors = computed(() => {
+    const flags = this.quoteErrorFlags();
+    const errs = this.t().form.errors;
+    return {
+      name: flags.name ? errs.name : '',
+      phone: flags.phone ? errs.phone : '',
+      email: flags.email ? errs.email : '',
+      serviceId: flags.serviceId ? errs.service : '',
+      message: flags.message ? errs.message : '',
+    };
   });
 
   readonly whatsappDirectUrl = computed(() => {
-    const text = encodeURIComponent(
-      'Bonjour 180 Services à domicile, j’aimerais obtenir une soumission gratuite pour un projet à Montréal.'
-    );
+    const text = encodeURIComponent(this.t().form.whatsappDirectMessage);
     return `https://wa.me/${this.contact.whatsappNumber}?text=${text}`;
   });
 
   readonly quoteSummaryText = computed(() => {
     const f = this.quoteForm();
+    const tpl = this.t().form.summaryTemplate;
+    const serviceLabel = this.resolveServiceLabel(f.serviceId) || tpl.serviceFallback;
+    const timelineLabel = this.t().form.timelines[f.timeline];
+
     return [
-      'Bonjour 180 Services à domicile,',
+      tpl.greeting,
       '',
-      'Voici ma demande de soumission gratuite :',
-      `• Nom : ${f.name.trim()}`,
-      `• Téléphone : ${f.phone.trim()}`,
-      `• Courriel : ${f.email.trim()}`,
-      `• Service souhaité : ${f.service || 'À préciser'}`,
-      `• Secteur : ${f.area.trim() || 'Montréal'}`,
-      `• Échéancier : ${f.timeline}`,
+      tpl.intro,
+      `• ${tpl.name} : ${f.name.trim()}`,
+      `• ${tpl.phone} : ${f.phone.trim()}`,
+      `• ${tpl.email} : ${f.email.trim()}`,
+      `• ${tpl.service} : ${serviceLabel}`,
+      `• ${tpl.area} : ${f.area.trim() || this.t().form.defaultArea}`,
+      `• ${tpl.timeline} : ${timelineLabel}`,
       '',
-      'Description du projet :',
+      tpl.descriptionHeading,
       f.message.trim(),
     ].join('\n');
   });
@@ -546,8 +194,10 @@ export class App {
 
   readonly quoteMailtoUrl = computed(() => {
     const f = this.quoteForm();
+    const tpl = this.t().form.summaryTemplate;
+    const serviceLabel = this.resolveServiceLabel(f.serviceId) || tpl.mailSubjectFallback;
     const subject = encodeURIComponent(
-      `Demande de soumission — ${f.service || 'Projet résidentiel'} (${f.name.trim()})`
+      `${tpl.mailSubjectPrefix} — ${serviceLabel} (${f.name.trim()})`
     );
     const body = encodeURIComponent(this.quoteSummaryText());
     return `mailto:${this.contact.email}?subject=${subject}&body=${body}`;
@@ -555,8 +205,69 @@ export class App {
 
   constructor() {
     afterNextRender(() => {
+      this.restoreSavedLanguage();
       this.initBrowserBehaviors();
     });
+  }
+
+  private resolveServiceLabel(serviceId: string): string {
+    if (!serviceId) {
+      return '';
+    }
+    if (serviceId === 'multi') {
+      return this.t().form.multiServiceOption;
+    }
+    return this.t().services.find((s) => s.id === serviceId)?.title ?? '';
+  }
+
+  private restoreSavedLanguage(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if (saved === 'fr' || saved === 'en') {
+        this.applyLanguage(saved, false);
+      }
+    } catch {
+      // Ignore storage restrictions (ex. navigation privée)
+    }
+  }
+
+  setLanguage(nextLang: Lang): void {
+    if (this.lang() === nextLang) {
+      return;
+    }
+    this.applyLanguage(nextLang, true);
+  }
+
+  private applyLanguage(nextLang: Lang, persist: boolean): void {
+    const previousDefaultArea = TRANSLATIONS[this.lang()].form.defaultArea;
+    const nextDefaultArea = TRANSLATIONS[nextLang].form.defaultArea;
+
+    this.lang.set(nextLang);
+
+    // Met à jour la ville par défaut si l'utilisateur ne l'a pas personnalisée
+    if (this.quoteForm().area.trim() === previousDefaultArea) {
+      this.quoteForm.update((current) => ({
+        ...current,
+        area: nextDefaultArea,
+      }));
+    }
+
+    if (isPlatformBrowser(this.platformId)) {
+      const meta = TRANSLATIONS[nextLang].meta;
+      document.documentElement.lang = meta.htmlLang;
+      document.title = meta.title;
+
+      if (persist) {
+        try {
+          localStorage.setItem(LANG_STORAGE_KEY, nextLang);
+        } catch {
+          // Ignore storage restrictions
+        }
+      }
+    }
   }
 
   private initBrowserBehaviors(): void {
@@ -574,7 +285,7 @@ export class App {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Suivi de la section active dans la barre de navigation
-    const sectionIds = this.navItems.map((item) => item.id);
+    const sectionIds = this.t().nav.map((item) => item.id);
     const sections = sectionIds
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -668,7 +379,6 @@ export class App {
     };
 
     const onTouchMove = (event: TouchEvent) => {
-      // Empêche le pincement multi-doigts (zoom mobile)
       if (event.touches.length > 1) {
         event.preventDefault();
         trackingPull = false;
@@ -704,7 +414,6 @@ export class App {
     };
 
     const onTouchEnd = (event: TouchEvent) => {
-      // Empêche le zoom par double-tap sur iOS Safari sans gêner les champs ou boutons
       const now = Date.now();
       const target = event.target as HTMLElement | null;
       const isInteractive =
@@ -817,9 +526,9 @@ export class App {
     if (currentIndex === -1) {
       return;
     }
-    const total = this.realisations.length;
-    const nextIndex = (currentIndex + delta + total) % total;
-    this.activeRealisationId.set(this.realisations[nextIndex].id);
+    const items = this.t().realisations;
+    const nextIndex = (currentIndex + delta + items.length) % items.length;
+    this.activeRealisationId.set(items[nextIndex].id);
     this.sliderPosition.set(50);
   }
 
@@ -859,20 +568,20 @@ export class App {
   }
 
   // --- Pré-sélection de service vers le formulaire ---
-  requestQuoteForService(serviceTitle: string): void {
+  requestQuoteForService(serviceId: string): void {
     this.closeLightbox();
     this.closeMobileMenu();
 
     this.quoteForm.update((current) => ({
       ...current,
-      service: serviceTitle,
+      serviceId,
     }));
-    this.quoteErrors.update((errs) => {
+    this.quoteErrorFlags.update((errs) => {
       const next = { ...errs };
-      delete next.service;
+      delete next.serviceId;
       return next;
     });
-    this.preselectedNotice.set(serviceTitle);
+    this.preselectedServiceId.set(serviceId);
     if (this.quoteStatus() === 'ready' || this.quoteStatus() === 'sent') {
       this.quoteStatus.set('idle');
     }
@@ -893,8 +602,12 @@ export class App {
       [field]: value,
     }));
 
-    if (this.quoteErrors()[field]) {
-      this.quoteErrors.update((errs) => {
+    if (field === 'serviceId') {
+      this.preselectedServiceId.set('');
+    }
+
+    if (field !== 'area' && field !== 'timeline' && this.quoteErrorFlags()[field]) {
+      this.quoteErrorFlags.update((errs) => {
         const next = { ...errs };
         delete next[field];
         return next;
@@ -904,37 +617,37 @@ export class App {
 
   private validateQuoteForm(): boolean {
     const f = this.quoteForm();
-    const errors: QuoteFormErrors = {};
+    const flags: QuoteErrorFlags = {};
 
     if (f.name.trim().length < 2) {
-      errors.name = 'Veuillez indiquer votre nom complet.';
+      flags.name = true;
     }
 
     const digits = f.phone.replace(/\D/g, '');
     if (digits.length < 10) {
-      errors.phone = 'Veuillez entrer un numéro de téléphone valide (ex. 514 823-3467).';
+      flags.phone = true;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(f.email.trim())) {
-      errors.email = 'Veuillez saisir une adresse courriel valide.';
+      flags.email = true;
     }
 
-    if (!f.service.trim()) {
-      errors.service = 'Veuillez sélectionner le service souhaité.';
+    if (!f.serviceId.trim()) {
+      flags.serviceId = true;
     }
 
     if (f.message.trim().length < 10) {
-      errors.message = 'Décrivez brièvement votre projet (au moins 10 caractères).';
+      flags.message = true;
     }
 
-    this.quoteErrors.set(errors);
-    return Object.keys(errors).length === 0;
+    this.quoteErrorFlags.set(flags);
+    return Object.keys(flags).length === 0;
   }
 
   async submitQuote(event: Event): Promise<void> {
     event.preventDefault();
-    this.quoteErrorMessage.set('');
+    this.showFallbackAlert.set(false);
     this.copiedSummary.set(false);
 
     if (!this.validateQuoteForm()) {
@@ -946,6 +659,7 @@ export class App {
     if (endpoint) {
       this.quoteStatus.set('submitting');
       try {
+        const f = this.quoteForm();
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
@@ -953,7 +667,14 @@ export class App {
             Accept: 'application/json',
           },
           body: JSON.stringify({
-            ...this.quoteForm(),
+            name: f.name,
+            phone: f.phone,
+            email: f.email,
+            service: this.resolveServiceLabel(f.serviceId),
+            area: f.area,
+            timeline: this.t().form.timelines[f.timeline],
+            message: f.message,
+            language: this.lang().toUpperCase(),
             source: 'Site web 180 Services à domicile',
           }),
         });
@@ -965,14 +686,11 @@ export class App {
         this.quoteStatus.set('sent');
       } catch {
         this.quoteStatus.set('ready');
-        this.quoteErrorMessage.set(
-          'L’envoi automatique est temporairement indisponible. Vous pouvez transmettre votre demande immédiatement par WhatsApp ou courriel ci-dessous.'
-        );
+        this.showFallbackAlert.set(true);
       }
       return;
     }
 
-    // Mode immédiat sans serveur : affiche le récapitulatif prêt à envoyer en 1 clic
     this.quoteStatus.set('ready');
   }
 
@@ -998,15 +716,15 @@ export class App {
       name: '',
       phone: '',
       email: '',
-      service: '',
-      area: 'Montréal',
-      timeline: 'Dès que possible',
+      serviceId: '',
+      area: this.t().form.defaultArea,
+      timeline: 'asap',
       message: '',
     });
-    this.quoteErrors.set({});
+    this.quoteErrorFlags.set({});
     this.quoteStatus.set('idle');
-    this.quoteErrorMessage.set('');
-    this.preselectedNotice.set('');
+    this.showFallbackAlert.set(false);
+    this.preselectedServiceId.set('');
     this.copiedSummary.set(false);
   }
 

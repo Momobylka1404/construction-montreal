@@ -1,344 +1,1197 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<a class="skip-link" href="#contenu">Aller au contenu principal</a>
 
-<style>
-  :host {
-    --bright-blue: oklch(51.01% 0.274 263.83);
-    --electric-violet: oklch(53.18% 0.28 296.97);
-    --french-violet: oklch(47.66% 0.246 305.88);
-    --vivid-pink: oklch(69.02% 0.277 332.77);
-    --hot-red: oklch(61.42% 0.238 15.34);
-    --orange-red: oklch(63.32% 0.24 31.68);
+<!-- INDICATEUR GLISSÉ POUR ACTUALISER (MOBILE / PWA) -->
+<div
+  class="ptr-indicator"
+  [class.is-visible]="pullDistance() > 6 || isRefreshing()"
+  [class.is-pulling]="isPulling()"
+  [class.is-ready]="pullReady()"
+  [class.is-refreshing]="isRefreshing()"
+  [style.--ptr-y]="pullDistance() + 'px'"
+  role="status"
+  aria-live="polite"
+  [attr.aria-hidden]="pullDistance() <= 6 && !isRefreshing()"
+>
+  <span class="ptr-pill">
+    <span class="ptr-icon" [style.--ptr-rot]="pullRotation() + 'deg'" aria-hidden="true">
+      @if (isRefreshing()) {
+        <svg class="ptr-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" focusable="false">
+          <path stroke-linecap="round" d="M21 12a9 9 0 1 1-2.64-6.36" />
+        </svg>
+      } @else {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" focusable="false">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0-5-5m5 5 5-5" />
+        </svg>
+      }
+    </span>
+    <span class="ptr-label">
+      @if (isRefreshing()) {
+        Actualisation…
+      } @else if (pullReady()) {
+        Relâchez pour actualiser
+      } @else {
+        Glissez pour actualiser
+      }
+    </span>
+  </span>
+</div>
 
-    --gray-900: oklch(19.37% 0.006 300.98);
-    --gray-700: oklch(36.98% 0.014 302.71);
-    --gray-400: oklch(70.9% 0.015 304.04);
-
-    --red-to-pink-to-purple-vertical-gradient: linear-gradient(
-      180deg,
-      var(--orange-red) 0%,
-      var(--vivid-pink) 50%,
-      var(--electric-violet) 100%
-    );
-
-    --red-to-pink-to-purple-horizontal-gradient: linear-gradient(
-      90deg,
-      var(--orange-red) 0%,
-      var(--vivid-pink) 50%,
-      var(--electric-violet) 100%
-    );
-
-    --pill-accent: var(--bright-blue);
-
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    display: block;
-    height: 100dvh;
-  }
-
-  h1 {
-    font-size: 3.125rem;
-    color: var(--gray-900);
-    font-weight: 500;
-    line-height: 100%;
-    letter-spacing: -0.125rem;
-    margin: 0;
-    font-family: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-  }
-
-  p {
-    margin: 0;
-    color: var(--gray-700);
-  }
-
-  main {
-    width: 100%;
-    min-height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    box-sizing: inherit;
-    position: relative;
-  }
-
-  .angular-logo {
-    max-width: 9.2rem;
-  }
-
-  .content {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    max-width: 700px;
-    margin-bottom: 3rem;
-  }
-
-  .content h1 {
-    margin-top: 1.75rem;
-  }
-
-  .content p {
-    margin-top: 1.5rem;
-  }
-
-  .divider {
-    width: 1px;
-    background: var(--red-to-pink-to-purple-vertical-gradient);
-    margin-inline: 0.5rem;
-  }
-
-  .pill-group {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-  }
-
-  .pill {
-    display: flex;
-    align-items: center;
-    --pill-accent: var(--bright-blue);
-    background: color-mix(in srgb, var(--pill-accent) 5%, transparent);
-    color: var(--pill-accent);
-    padding-inline: 0.75rem;
-    padding-block: 0.375rem;
-    border-radius: 2.75rem;
-    border: 0;
-    transition: background 0.3s ease;
-    font-family: var(--inter-font);
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 1.4rem;
-    letter-spacing: -0.00875rem;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-
-  .pill:hover {
-    background: color-mix(in srgb, var(--pill-accent) 15%, transparent);
-  }
-
-  .pill-group .pill:nth-child(6n + 1) {
-    --pill-accent: var(--bright-blue);
-  }
-  .pill-group .pill:nth-child(6n + 2) {
-    --pill-accent: var(--electric-violet);
-  }
-  .pill-group .pill:nth-child(6n + 3) {
-    --pill-accent: var(--french-violet);
-  }
-
-  .pill-group .pill:nth-child(6n + 4),
-  .pill-group .pill:nth-child(6n + 5),
-  .pill-group .pill:nth-child(6n + 6) {
-    --pill-accent: var(--hot-red);
-  }
-
-  .pill-group svg {
-    margin-inline-start: 0.25rem;
-  }
-
-  .social-links {
-    display: flex;
-    align-items: center;
-    gap: 0.73rem;
-    margin-top: 1.5rem;
-  }
-
-  .social-links path {
-    transition: fill 0.3s ease;
-    fill: var(--gray-400);
-  }
-
-  .social-links a:hover svg path {
-    fill: var(--gray-900);
-  }
-
-  @media screen and (max-width: 650px) {
-    .content {
-      flex-direction: column;
-      width: max-content;
-    }
-
-    .divider {
-      height: 1px;
-      width: 100%;
-      background: var(--red-to-pink-to-purple-horizontal-gradient);
-      margin-block: 1.5rem;
-    }
-  }
-</style>
-
-<main class="main">
-  <div class="content">
-    <div class="left-side">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 982 239"
-        fill="none"
-        class="angular-logo"
-      >
-        <g clip-path="url(#a)">
-          <path
-            fill="url(#b)"
-            d="M388.676 191.625h30.849L363.31 31.828h-35.758l-56.215 159.797h30.848l13.174-39.356h60.061l13.256 39.356Zm-65.461-62.675 21.602-64.311h1.227l21.602 64.311h-44.431Zm126.831-7.527v70.202h-28.23V71.839h27.002v20.374h1.392c2.782-6.71 7.2-12.028 13.255-15.956 6.056-3.927 13.584-5.89 22.503-5.89 8.264 0 15.465 1.8 21.684 5.318 6.137 3.518 10.964 8.673 14.319 15.382 3.437 6.71 5.074 14.81 4.992 24.383v76.175h-28.23v-71.92c0-8.019-2.046-14.237-6.219-18.819-4.173-4.5-9.819-6.791-17.102-6.791-4.91 0-9.328 1.063-13.174 3.272-3.846 2.128-6.792 5.237-9.001 9.328-2.046 4.009-3.191 8.918-3.191 14.728ZM589.233 239c-10.147 0-18.82-1.391-26.103-4.091-7.282-2.7-13.092-6.382-17.511-10.964-4.418-4.582-7.528-9.655-9.164-15.219l25.448-6.136c1.145 2.372 2.782 4.663 4.991 6.954 2.209 2.291 5.155 4.255 8.837 5.81 3.683 1.554 8.428 2.291 14.074 2.291 8.019 0 14.647-1.964 19.884-5.81 5.237-3.845 7.856-10.227 7.856-19.064v-22.665h-1.391c-1.473 2.946-3.601 5.892-6.383 9.001-2.782 3.109-6.464 5.645-10.965 7.691-4.582 2.046-10.228 3.109-17.101 3.109-9.165 0-17.511-2.209-25.039-6.545-7.446-4.337-13.42-10.883-17.757-19.474-4.418-8.673-6.628-19.473-6.628-32.565 0-13.091 2.21-24.301 6.628-33.383 4.419-9.082 10.311-15.955 17.839-20.7 7.528-4.746 15.874-7.037 25.039-7.037 7.037 0 12.846 1.145 17.347 3.518 4.582 2.373 8.182 5.236 10.883 8.51 2.7 3.272 4.746 6.382 6.137 9.327h1.554v-19.8h27.821v121.749c0 10.228-2.454 18.737-7.364 25.447-4.91 6.709-11.538 11.7-20.048 15.055-8.509 3.355-18.165 4.991-28.884 4.991Zm.245-71.266c5.974 0 11.047-1.473 15.302-4.337 4.173-2.945 7.446-7.118 9.573-12.519 2.21-5.482 3.274-12.027 3.274-19.637 0-7.609-1.064-14.155-3.274-19.8-2.127-5.646-5.318-10.064-9.491-13.255-4.174-3.11-9.329-4.746-15.384-4.746s-11.537 1.636-15.792 4.91c-4.173 3.272-7.365 7.772-9.492 13.418-2.128 5.727-3.191 12.191-3.191 19.392 0 7.2 1.063 13.745 3.273 19.228 2.127 5.482 5.318 9.736 9.573 12.764 4.174 3.027 9.41 4.582 15.629 4.582Zm141.56-26.51V71.839h28.23v119.786h-27.412v-21.273h-1.227c-2.7 6.709-7.119 12.191-13.338 16.446-6.137 4.255-13.747 6.382-22.748 6.382-7.855 0-14.81-1.718-20.783-5.237-5.974-3.518-10.72-8.591-14.075-15.382-3.355-6.709-5.073-14.891-5.073-24.464V71.839h28.312v71.921c0 7.609 2.046 13.664 6.219 18.083 4.173 4.5 9.655 6.709 16.365 6.709 4.173 0 8.183-.982 12.111-3.028 3.927-2.045 7.118-5.072 9.655-9.082 2.537-4.091 3.764-9.164 3.764-15.218Zm65.707-109.395v159.796h-28.23V31.828h28.23Zm44.841 162.169c-7.61 0-14.402-1.391-20.457-4.091-6.055-2.7-10.883-6.791-14.32-12.109-3.518-5.319-5.237-11.946-5.237-19.801 0-6.791 1.228-12.355 3.765-16.773 2.536-4.419 5.891-7.937 10.228-10.637 4.337-2.618 9.164-4.664 14.647-6.055 5.4-1.391 11.046-2.373 16.856-3.027 7.037-.737 12.683-1.391 17.102-1.964 4.337-.573 7.528-1.555 9.574-2.782 1.963-1.309 3.027-3.273 3.027-5.973v-.491c0-5.891-1.718-10.391-5.237-13.664-3.518-3.191-8.51-4.828-15.056-4.828-6.955 0-12.356 1.473-16.447 4.5-4.009 3.028-6.71 6.546-8.183 10.719l-26.348-3.764c2.046-7.282 5.483-13.336 10.31-18.328 4.746-4.909 10.638-8.59 17.511-11.045 6.955-2.455 14.565-3.682 22.912-3.682 5.809 0 11.537.654 17.265 2.045s10.965 3.6 15.711 6.71c4.746 3.109 8.51 7.282 11.455 12.6 2.864 5.318 4.337 11.946 4.337 19.883v80.184h-27.166v-16.446h-.9c-1.719 3.355-4.092 6.464-7.201 9.328-3.109 2.864-6.955 5.237-11.619 6.955-4.828 1.718-10.229 2.536-16.529 2.536Zm7.364-20.701c5.646 0 10.556-1.145 14.729-3.354 4.173-2.291 7.364-5.237 9.655-9.001 2.292-3.763 3.355-7.854 3.355-12.273v-14.155c-.9.737-2.373 1.391-4.5 2.046-2.128.654-4.419 1.145-7.037 1.636-2.619.491-5.155.9-7.692 1.227-2.537.328-4.746.655-6.628.901-4.173.572-8.019 1.472-11.292 2.781-3.355 1.31-5.973 3.11-7.855 5.401-1.964 2.291-2.864 5.318-2.864 8.918 0 5.237 1.882 9.164 5.728 11.782 3.682 2.782 8.51 4.091 14.401 4.091Zm64.643 18.328V71.839h27.412v19.965h1.227c2.21-6.955 5.974-12.274 11.292-16.038 5.319-3.763 11.456-5.645 18.329-5.645 1.555 0 3.355.082 5.237.163 1.964.164 3.601.328 4.91.573v25.938c-1.227-.41-3.109-.819-5.646-1.146a58.814 58.814 0 0 0-7.446-.49c-5.155 0-9.738 1.145-13.829 3.354-4.091 2.209-7.282 5.236-9.655 9.164-2.373 3.927-3.519 8.427-3.519 13.5v70.448h-28.312ZM222.077 39.192l-8.019 125.923L137.387 0l84.69 39.192Zm-53.105 162.825-57.933 33.056-57.934-33.056 11.783-28.556h92.301l11.783 28.556ZM111.039 62.675l30.357 73.803H80.681l30.358-73.803ZM7.937 165.115 0 39.192 84.69 0 7.937 165.115Z"
-          />
-          <path
-            fill="url(#c)"
-            d="M388.676 191.625h30.849L363.31 31.828h-35.758l-56.215 159.797h30.848l13.174-39.356h60.061l13.256 39.356Zm-65.461-62.675 21.602-64.311h1.227l21.602 64.311h-44.431Zm126.831-7.527v70.202h-28.23V71.839h27.002v20.374h1.392c2.782-6.71 7.2-12.028 13.255-15.956 6.056-3.927 13.584-5.89 22.503-5.89 8.264 0 15.465 1.8 21.684 5.318 6.137 3.518 10.964 8.673 14.319 15.382 3.437 6.71 5.074 14.81 4.992 24.383v76.175h-28.23v-71.92c0-8.019-2.046-14.237-6.219-18.819-4.173-4.5-9.819-6.791-17.102-6.791-4.91 0-9.328 1.063-13.174 3.272-3.846 2.128-6.792 5.237-9.001 9.328-2.046 4.009-3.191 8.918-3.191 14.728ZM589.233 239c-10.147 0-18.82-1.391-26.103-4.091-7.282-2.7-13.092-6.382-17.511-10.964-4.418-4.582-7.528-9.655-9.164-15.219l25.448-6.136c1.145 2.372 2.782 4.663 4.991 6.954 2.209 2.291 5.155 4.255 8.837 5.81 3.683 1.554 8.428 2.291 14.074 2.291 8.019 0 14.647-1.964 19.884-5.81 5.237-3.845 7.856-10.227 7.856-19.064v-22.665h-1.391c-1.473 2.946-3.601 5.892-6.383 9.001-2.782 3.109-6.464 5.645-10.965 7.691-4.582 2.046-10.228 3.109-17.101 3.109-9.165 0-17.511-2.209-25.039-6.545-7.446-4.337-13.42-10.883-17.757-19.474-4.418-8.673-6.628-19.473-6.628-32.565 0-13.091 2.21-24.301 6.628-33.383 4.419-9.082 10.311-15.955 17.839-20.7 7.528-4.746 15.874-7.037 25.039-7.037 7.037 0 12.846 1.145 17.347 3.518 4.582 2.373 8.182 5.236 10.883 8.51 2.7 3.272 4.746 6.382 6.137 9.327h1.554v-19.8h27.821v121.749c0 10.228-2.454 18.737-7.364 25.447-4.91 6.709-11.538 11.7-20.048 15.055-8.509 3.355-18.165 4.991-28.884 4.991Zm.245-71.266c5.974 0 11.047-1.473 15.302-4.337 4.173-2.945 7.446-7.118 9.573-12.519 2.21-5.482 3.274-12.027 3.274-19.637 0-7.609-1.064-14.155-3.274-19.8-2.127-5.646-5.318-10.064-9.491-13.255-4.174-3.11-9.329-4.746-15.384-4.746s-11.537 1.636-15.792 4.91c-4.173 3.272-7.365 7.772-9.492 13.418-2.128 5.727-3.191 12.191-3.191 19.392 0 7.2 1.063 13.745 3.273 19.228 2.127 5.482 5.318 9.736 9.573 12.764 4.174 3.027 9.41 4.582 15.629 4.582Zm141.56-26.51V71.839h28.23v119.786h-27.412v-21.273h-1.227c-2.7 6.709-7.119 12.191-13.338 16.446-6.137 4.255-13.747 6.382-22.748 6.382-7.855 0-14.81-1.718-20.783-5.237-5.974-3.518-10.72-8.591-14.075-15.382-3.355-6.709-5.073-14.891-5.073-24.464V71.839h28.312v71.921c0 7.609 2.046 13.664 6.219 18.083 4.173 4.5 9.655 6.709 16.365 6.709 4.173 0 8.183-.982 12.111-3.028 3.927-2.045 7.118-5.072 9.655-9.082 2.537-4.091 3.764-9.164 3.764-15.218Zm65.707-109.395v159.796h-28.23V31.828h28.23Zm44.841 162.169c-7.61 0-14.402-1.391-20.457-4.091-6.055-2.7-10.883-6.791-14.32-12.109-3.518-5.319-5.237-11.946-5.237-19.801 0-6.791 1.228-12.355 3.765-16.773 2.536-4.419 5.891-7.937 10.228-10.637 4.337-2.618 9.164-4.664 14.647-6.055 5.4-1.391 11.046-2.373 16.856-3.027 7.037-.737 12.683-1.391 17.102-1.964 4.337-.573 7.528-1.555 9.574-2.782 1.963-1.309 3.027-3.273 3.027-5.973v-.491c0-5.891-1.718-10.391-5.237-13.664-3.518-3.191-8.51-4.828-15.056-4.828-6.955 0-12.356 1.473-16.447 4.5-4.009 3.028-6.71 6.546-8.183 10.719l-26.348-3.764c2.046-7.282 5.483-13.336 10.31-18.328 4.746-4.909 10.638-8.59 17.511-11.045 6.955-2.455 14.565-3.682 22.912-3.682 5.809 0 11.537.654 17.265 2.045s10.965 3.6 15.711 6.71c4.746 3.109 8.51 7.282 11.455 12.6 2.864 5.318 4.337 11.946 4.337 19.883v80.184h-27.166v-16.446h-.9c-1.719 3.355-4.092 6.464-7.201 9.328-3.109 2.864-6.955 5.237-11.619 6.955-4.828 1.718-10.229 2.536-16.529 2.536Zm7.364-20.701c5.646 0 10.556-1.145 14.729-3.354 4.173-2.291 7.364-5.237 9.655-9.001 2.292-3.763 3.355-7.854 3.355-12.273v-14.155c-.9.737-2.373 1.391-4.5 2.046-2.128.654-4.419 1.145-7.037 1.636-2.619.491-5.155.9-7.692 1.227-2.537.328-4.746.655-6.628.901-4.173.572-8.019 1.472-11.292 2.781-3.355 1.31-5.973 3.11-7.855 5.401-1.964 2.291-2.864 5.318-2.864 8.918 0 5.237 1.882 9.164 5.728 11.782 3.682 2.782 8.51 4.091 14.401 4.091Zm64.643 18.328V71.839h27.412v19.965h1.227c2.21-6.955 5.974-12.274 11.292-16.038 5.319-3.763 11.456-5.645 18.329-5.645 1.555 0 3.355.082 5.237.163 1.964.164 3.601.328 4.91.573v25.938c-1.227-.41-3.109-.819-5.646-1.146a58.814 58.814 0 0 0-7.446-.49c-5.155 0-9.738 1.145-13.829 3.354-4.091 2.209-7.282 5.236-9.655 9.164-2.373 3.927-3.519 8.427-3.519 13.5v70.448h-28.312ZM222.077 39.192l-8.019 125.923L137.387 0l84.69 39.192Zm-53.105 162.825-57.933 33.056-57.934-33.056 11.783-28.556h92.301l11.783 28.556ZM111.039 62.675l30.357 73.803H80.681l30.358-73.803ZM7.937 165.115 0 39.192 84.69 0 7.937 165.115Z"
-          />
-        </g>
-        <defs>
-          <radialGradient
-            id="c"
-            cx="0"
-            cy="0"
-            r="1"
-            gradientTransform="rotate(118.122 171.182 60.81) scale(205.794)"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stop-color="#FF41F8" />
-            <stop offset=".707" stop-color="#FF41F8" stop-opacity=".5" />
-            <stop offset="1" stop-color="#FF41F8" stop-opacity="0" />
-          </radialGradient>
-          <linearGradient
-            id="b"
-            x1="0"
-            x2="982"
-            y1="192"
-            y2="192"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stop-color="#F0060B" />
-            <stop offset="0" stop-color="#F0070C" />
-            <stop offset=".526" stop-color="#CC26D5" />
-            <stop offset="1" stop-color="#7702FF" />
-          </linearGradient>
-          <clipPath id="a"><path fill="#fff" d="M0 0h982v239H0z" /></clipPath>
-        </defs>
-      </svg>
-      <h1>Hello, {{ title() }}</h1>
-      <p>Congratulations! Your app is running. 🎉</p>
+<!-- =========================================================
+     BARRE D'INFORMATION SUPÉRIEURE (DESKTOP)
+========================================================= -->
+<div class="top-bar" aria-label="Coordonnées rapides">
+  <div class="container top-bar-inner">
+    <div class="top-bar-left">
+      <span class="top-bar-item">
+        <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-5.686-7-11a7 7 0 1 1 14 0c0 5.314-7 11-7 11Z" />
+          <circle cx="12" cy="10" r="2.5" />
+        </svg>
+        {{ contact.addressStreet }}, {{ contact.addressCity }}
+      </span>
+      <span class="top-bar-sep" aria-hidden="true"></span>
+      <span class="top-bar-item">Soumission gratuite et sans engagement</span>
     </div>
-    <div class="divider" role="separator" aria-label="Divider"></div>
-    <div class="right-side">
-      <div class="pill-group">
-        @for (item of [
-          { title: 'Explore the Docs', link: 'https://angular.dev' },
-          { title: 'Learn with Tutorials', link: 'https://angular.dev/tutorials' },
-          { title: 'Prompt and best practices for AI', link: 'https://angular.dev/ai/develop-with-ai'},
-          { title: 'CLI Docs', link: 'https://angular.dev/tools/cli' },
-          { title: 'Angular Language Service', link: 'https://angular.dev/tools/language-service' },
-          { title: 'Angular DevTools', link: 'https://angular.dev/tools/devtools' },
-        ]; track item.title) {
-          <a
-            class="pill"
-            [href]="item.link"
-            target="_blank"
-            rel="noopener"
-          >
-            <span>{{ item.title }}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="14"
-              viewBox="0 -960 960 960"
-              width="14"
-              fill="currentColor"
-            >
-              <path
-                d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"
-              />
+
+    <div class="top-bar-right">
+      <a class="top-bar-link" [href]="contact.phoneHref">
+        <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z" />
+        </svg>
+        {{ contact.phoneDisplay }}
+      </a>
+      <a class="top-bar-link" [href]="'mailto:' + contact.email">
+        {{ contact.email }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     EN-TÊTE PRINCIPAL & NAVIGATION RESPONSIVE
+========================================================= -->
+<header class="site-header" [class.is-scrolled]="isScrolled()">
+  <div class="container header-inner">
+    <a class="brand" href="#accueil" (click)="closeMobileMenu()" aria-label="180 Services à domicile — Retour à l'accueil">
+      <span class="brand-mark" aria-hidden="true">180</span>
+      <span class="brand-text">
+        <span class="brand-name">SERVICES À DOMICILE</span>
+        <span class="brand-city">MONTRÉAL</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Navigation principale">
+      @for (item of navItems; track item.id) {
+        <a
+          [href]="'#' + item.id"
+          [class.is-active]="activeSection() === item.id"
+          [attr.aria-current]="activeSection() === item.id ? 'page' : null"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-phone" [href]="contact.phoneHref" aria-label="Appeler le 514 823-3467">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z" />
+        </svg>
+        <span>{{ contact.phoneDisplay }}</span>
+      </a>
+
+      <a class="btn btn-gold btn-sm header-cta" href="#contact">
+        Soumission gratuite
+      </a>
+
+      <button
+        type="button"
+        class="menu-toggle"
+        [class.is-open]="mobileMenuOpen()"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        aria-controls="mobile-drawer"
+        aria-label="Ouvrir ou fermer le menu de navigation"
+        (click)="toggleMobileMenu()"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- TIROIR MOBILE -->
+@if (mobileMenuOpen()) {
+  <div class="mobile-backdrop" (click)="closeMobileMenu()" aria-hidden="true"></div>
+}
+<aside
+  id="mobile-drawer"
+  class="mobile-drawer"
+  [class.is-open]="mobileMenuOpen()"
+  [attr.aria-hidden]="!mobileMenuOpen()"
+  aria-label="Menu mobile"
+>
+  <div class="mobile-drawer-head">
+    <span class="brand brand-light">
+      <span class="brand-mark" aria-hidden="true">180</span>
+      <span class="brand-text">
+        <span class="brand-name">SERVICES À DOMICILE</span>
+        <span class="brand-city">MONTRÉAL</span>
+      </span>
+    </span>
+    <button
+      type="button"
+      class="drawer-close"
+      aria-label="Fermer le menu"
+      (click)="closeMobileMenu()"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+        <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Navigation mobile">
+    @for (item of navItems; track item.id) {
+      <a
+        [href]="'#' + item.id"
+        [class.is-active]="activeSection() === item.id"
+        (click)="closeMobileMenu()"
+      >
+        <span>{{ item.label }}</span>
+        <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    }
+  </nav>
+
+  <div class="mobile-drawer-footer">
+    <a class="btn btn-gold btn-block" href="#contact" (click)="closeMobileMenu()">
+      Demander une soumission gratuite
+    </a>
+    <a
+      class="btn btn-whatsapp btn-block"
+      [href]="whatsappDirectUrl()"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Écrire sur WhatsApp
+    </a>
+    <div class="mobile-drawer-meta">
+      <a [href]="contact.phoneHref">{{ contact.phoneDisplay }}</a>
+      <a [href]="'mailto:' + contact.email">{{ contact.email }}</a>
+      <span>{{ contact.addressStreet }}, {{ contact.addressCity }}</span>
+    </div>
+  </div>
+</aside>
+
+<main id="contenu">
+  <!-- =========================================================
+       1. HERO ARCHITECTURAL
+  ========================================================= -->
+  <section class="hero" id="accueil" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <div class="container hero-inner">
+      <div class="hero-content">
+        <p class="eyebrow eyebrow-light">
+          <span class="eyebrow-line" aria-hidden="true"></span>
+          VOTRE PARTENAIRE RÉSIDENTIEL À MONTRÉAL
+        </p>
+
+        <h1 id="hero-title" class="hero-title">
+          Un seul partenaire.
+          <span class="hero-title-accent">Tous vos projets.</span>
+        </h1>
+
+        <p class="hero-lead">
+          De la construction à la rénovation intérieure, du pavage à l’aménagement paysager,
+          nous accompagnons les propriétaires montréalais avec exigence, clarté et savoir-faire.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-gold btn-lg">
+            <span>Demander une soumission</span>
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
             </svg>
           </a>
+
+          <a href="#services" class="btn btn-ghost-light btn-lg">
+            Explorer nos 8 services
+          </a>
+        </div>
+
+        <div class="hero-direct">
+          <span>Besoin d’une réponse rapide ?</span>
+          <a [href]="contact.phoneHref">{{ contact.phoneDisplay }}</a>
+          <span class="dot-sep" aria-hidden="true">•</span>
+          <a [href]="whatsappDirectUrl()" target="_blank" rel="noopener noreferrer">
+            WhatsApp direct
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-pillars" aria-label="Nos engagements essentiels">
+        @for (pillar of trustPillars; track pillar.title) {
+          <div class="pillar-item">
+            <strong class="pillar-title">{{ pillar.title }}</strong>
+            <span class="pillar-detail">{{ pillar.detail }}</span>
+          </div>
         }
       </div>
-      <div class="social-links">
-        <a
-          href="https://github.com/angular/angular"
-          aria-label="Github"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            width="25"
-            height="24"
-            viewBox="0 0 25 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            alt="Github"
+    </div>
+
+    <a href="#services" class="scroll-cue" aria-label="Défiler vers nos services">
+      <span>Découvrir</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0-5-5m5 5 5-5" />
+      </svg>
+    </a>
+  </section>
+
+  <!-- =========================================================
+       2. NOS SERVICES PROFESSIONNELS
+  ========================================================= -->
+  <section class="section section-white" id="services" aria-labelledby="services-title">
+    <div class="container">
+      <div class="section-head section-head-split" data-reveal>
+        <div>
+          <p class="eyebrow">
+            <span class="eyebrow-line" aria-hidden="true"></span>
+            EXPERTISE COMPLÈTE
+          </p>
+          <h2 id="services-title" class="section-title">
+            Huit métiers maîtrisés pour <em>sublimer votre propriété</em>
+          </h2>
+        </div>
+
+        <div class="section-head-aside">
+          <p class="section-subtitle">
+            Des solutions complètes et coordonnées pour l’intérieur comme pour l’extérieur,
+            adaptées aux résidences de Montréal.
+          </p>
+
+          <div class="filter-tabs" role="tablist" aria-label="Filtrer les services par catégorie">
+            <button
+              type="button"
+              role="tab"
+              class="filter-tab"
+              [class.is-active]="serviceFilter() === 'all'"
+              [attr.aria-selected]="serviceFilter() === 'all'"
+              (click)="setServiceFilter('all')"
+            >
+              Tous <span>(8)</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              class="filter-tab"
+              [class.is-active]="serviceFilter() === 'batiment'"
+              [attr.aria-selected]="serviceFilter() === 'batiment'"
+              (click)="setServiceFilter('batiment')"
+            >
+              Bâtiment &amp; Intérieur <span>(3)</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              class="filter-tab"
+              [class.is-active]="serviceFilter() === 'exterieur'"
+              [attr.aria-selected]="serviceFilter() === 'exterieur'"
+              (click)="setServiceFilter('exterieur')"
+            >
+              Extérieur &amp; Entretien <span>(5)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="services-grid" data-reveal>
+        @for (service of filteredServices(); track service.id) {
+          <article class="service-card">
+            <div class="service-media">
+              <img
+                [src]="service.image"
+                [alt]="service.alt"
+                loading="lazy"
+                decoding="async"
+                width="600"
+                height="375"
+              />
+              <span class="service-index">{{ service.number }}</span>
+              <span class="service-badge">{{ service.categoryLabel }}</span>
+            </div>
+
+            <div class="service-body">
+              <h3>{{ service.title }}</h3>
+              <p class="service-desc">{{ service.description }}</p>
+
+              <ul class="service-list">
+                @for (point of service.highlights; track point) {
+                  <li>
+                    <svg class="check-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 8 14l7.5-8" />
+                    </svg>
+                    <span>{{ point }}</span>
+                  </li>
+                }
+              </ul>
+
+              <button
+                type="button"
+                class="service-cta"
+                (click)="requestQuoteForService(service.title)"
+              >
+                <span>Demander un devis</span>
+                <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       3. À PROPOS DE 180 SERVICES À DOMICILE
+  ========================================================= -->
+  <section class="section section-alabaster" id="apropos" aria-labelledby="about-title">
+    <div class="container about-grid">
+      <div class="about-copy" data-reveal>
+        <p class="eyebrow">
+          <span class="eyebrow-line" aria-hidden="true"></span>
+          QUI SOMMES-NOUS ?
+        </p>
+
+        <h2 id="about-title" class="section-title">
+          Votre satisfaction, <em>notre priorité absolue.</em>
+        </h2>
+
+        <p class="about-lead">
+          180 SERVICES À DOMICILE accompagne les propriétaires résidentiels dans leurs
+          projets de construction, de rénovation et d’entretien extérieur à Montréal.
+        </p>
+
+        <p class="about-text">
+          Notre ambition est simple : vous éviter de multiplier les intervenants en vous
+          offrant un partenaire polyvalent, fiable et attentif à chaque finition — du gros
+          œuvre jusqu’à l’entretien saisonnier de votre terrain.
+        </p>
+
+        <div class="commitments-list">
+          @for (item of commitments; track item.title) {
+            <div class="commitment-item">
+              <div class="commitment-icon" aria-hidden="true">
+                @switch (item.icon) {
+                  @case ('layers') {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3 2 8.5 12 14l10-5.5L12 3Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m2 13.5 10 5.5 10-5.5" />
+                    </svg>
+                  }
+                  @case ('shield') {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3 4 6.5v5.5c0 4.6 3.4 8.2 8 9.5 4.6-1.3 8-4.9 8-9.5V6.5L12 3Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m8.8 12.2 2.2 2.2 4.4-4.6" />
+                    </svg>
+                  }
+                  @case ('pin') {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-5.686-7-11a7 7 0 1 1 14 0c0 5.314-7 11-7 11Z" />
+                      <circle cx="12" cy="10" r="2.5" />
+                    </svg>
+                  }
+                }
+              </div>
+              <div>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.description }}</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="about-actions">
+          <a href="#contact" class="btn btn-navy">
+            Parlons de votre projet
+          </a>
+          <a href="#realisations" class="btn btn-outline-navy">
+            Voir nos réalisations
+          </a>
+        </div>
+      </div>
+
+      <div class="about-visual" data-reveal>
+        <div class="about-frame">
+          <img
+            src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1100&q=85&auto=format&fit=crop"
+            alt="Intérieur résidentiel lumineux et contemporain aménagé avec soin"
+            loading="lazy"
+            decoding="async"
+            width="800"
+            height="640"
+          />
+        </div>
+        <div class="about-floating-card">
+          <span class="floating-label">BASE OPÉRATIONNELLE</span>
+          <strong>Montréal, Québec</strong>
+          <p>Construction, rénovation et entretien complet autour d’un seul contact dédié.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       4. NOTRE MÉTHODE EN 4 ÉTAPES (BANDEAU ARCHITECTURAL SOMBRE)
+  ========================================================= -->
+  <section class="section section-navy process-section" aria-labelledby="process-title">
+    <div class="container">
+      <div class="section-head section-head-center" data-reveal>
+        <p class="eyebrow eyebrow-light">
+          <span class="eyebrow-line" aria-hidden="true"></span>
+          MÉTHODE DE TRAVAIL
+          <span class="eyebrow-line" aria-hidden="true"></span>
+        </p>
+        <h2 id="process-title" class="section-title section-title-light">
+          Un déroulement clair, <em>sans imprévu</em>
+        </h2>
+        <p class="section-subtitle section-subtitle-light">
+          Une organisation simple en quatre temps pour mener vos travaux sereinement.
+        </p>
+      </div>
+
+      <ol class="process-grid">
+        @for (step of processSteps; track step.number) {
+          <li class="process-card" data-reveal>
+            <span class="process-num">{{ step.number }}</span>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+          </li>
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       5. RÉALISATIONS AVANT / APRÈS (GALERIE INTERACTIVE)
+  ========================================================= -->
+  <section class="section section-white" id="realisations" aria-labelledby="realisations-title">
+    <div class="container container-wide">
+      <div class="section-head section-head-center" data-reveal>
+        <p class="eyebrow">
+          <span class="eyebrow-line" aria-hidden="true"></span>
+          NOS RÉALISATIONS
+          <span class="eyebrow-line" aria-hidden="true"></span>
+        </p>
+        <h2 id="realisations-title" class="section-title">
+          Transformations <em>Avant / Après</em>
+        </h2>
+        <p class="section-subtitle">
+          Cliquez sur n’importe quelle réalisation pour ouvrir le comparateur interactif en plein écran.
+        </p>
+
+        <div class="filter-tabs filter-tabs-center" role="tablist" aria-label="Filtrer les réalisations">
+          <button
+            type="button"
+            role="tab"
+            class="filter-tab"
+            [class.is-active]="realisationFilter() === 'all'"
+            [attr.aria-selected]="realisationFilter() === 'all'"
+            (click)="setRealisationFilter('all')"
           >
-            <path
-              d="M12.3047 0C5.50634 0 0 5.50942 0 12.3047C0 17.7423 3.52529 22.3535 8.41332 23.9787C9.02856 24.0946 9.25414 23.7142 9.25414 23.3871C9.25414 23.0949 9.24389 22.3207 9.23876 21.2953C5.81601 22.0377 5.09414 19.6444 5.09414 19.6444C4.53427 18.2243 3.72524 17.8449 3.72524 17.8449C2.61064 17.082 3.81137 17.0973 3.81137 17.0973C5.04697 17.1835 5.69604 18.3647 5.69604 18.3647C6.79321 20.2463 8.57636 19.7029 9.27978 19.3881C9.39052 18.5924 9.70736 18.0499 10.0591 17.7423C7.32641 17.4347 4.45429 16.3765 4.45429 11.6618C4.45429 10.3185 4.9311 9.22133 5.72065 8.36C5.58222 8.04931 5.16694 6.79833 5.82831 5.10337C5.82831 5.10337 6.85883 4.77319 9.2121 6.36459C10.1965 6.09082 11.2424 5.95546 12.2883 5.94931C13.3342 5.95546 14.3801 6.09082 15.3644 6.36459C17.7023 4.77319 18.7328 5.10337 18.7328 5.10337C19.3942 6.79833 18.9789 8.04931 18.8559 8.36C19.6403 9.22133 20.1171 10.3185 20.1171 11.6618C20.1171 16.3888 17.2409 17.4296 14.5031 17.7321C14.9338 18.1012 15.3337 18.8559 15.3337 20.0084C15.3337 21.6552 15.3183 22.978 15.3183 23.3779C15.3183 23.7009 15.5336 24.0854 16.1642 23.9623C21.0871 22.3484 24.6094 17.7341 24.6094 12.3047C24.6094 5.50942 19.0999 0 12.3047 0Z"
-            />
-          </svg>
-        </a>
-        <a
-          href="https://x.com/angular"
-          aria-label="X"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            alt="X"
+            Toutes <span>(8)</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="filter-tab"
+            [class.is-active]="realisationFilter() === 'batiment'"
+            [attr.aria-selected]="realisationFilter() === 'batiment'"
+            (click)="setRealisationFilter('batiment')"
           >
-            <path
-              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-            />
-          </svg>
-        </a>
-        <a
-          href="https://www.youtube.com/channel/UCbn1OgGei-DV7aSRo_HaAiw"
-          aria-label="Youtube"
-          target="_blank"
-          rel="noopener"
-        >
-          <svg
-            width="29"
-            height="20"
-            viewBox="0 0 29 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            alt="Youtube"
+            Bâtiment &amp; Intérieur <span>(3)</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="filter-tab"
+            [class.is-active]="realisationFilter() === 'exterieur'"
+            [attr.aria-selected]="realisationFilter() === 'exterieur'"
+            (click)="setRealisationFilter('exterieur')"
           >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M27.4896 1.52422C27.9301 1.96749 28.2463 2.51866 28.4068 3.12258C29.0004 5.35161 29.0004 10 29.0004 10C29.0004 10 29.0004 14.6484 28.4068 16.8774C28.2463 17.4813 27.9301 18.0325 27.4896 18.4758C27.0492 18.9191 26.5 19.2389 25.8972 19.4032C23.6778 20 14.8068 20 14.8068 20C14.8068 20 5.93586 20 3.71651 19.4032C3.11363 19.2389 2.56449 18.9191 2.12405 18.4758C1.68361 18.0325 1.36732 17.4813 1.20683 16.8774C0.613281 14.6484 0.613281 10 0.613281 10C0.613281 10 0.613281 5.35161 1.20683 3.12258C1.36732 2.51866 1.68361 1.96749 2.12405 1.52422C2.56449 1.08095 3.11363 0.76113 3.71651 0.596774C5.93586 0 14.8068 0 14.8068 0C14.8068 0 23.6778 0 25.8972 0.596774C26.5 0.76113 27.0492 1.08095 27.4896 1.52422ZM19.3229 10L11.9036 5.77905V14.221L19.3229 10Z"
-            />
-          </svg>
+            Extérieur &amp; Terrain <span>(5)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="realisations-grid" data-reveal>
+        @for (item of filteredRealisations(); track item.id) {
+          <article class="realisation-card">
+            <button
+              type="button"
+              class="realisation-trigger"
+              (click)="openLightbox(item.id)"
+              [attr.aria-label]="'Comparer en grand : ' + item.title + ' avant et après'"
+            >
+              <div class="comparison-images">
+                <div class="comparison-photo">
+                  <img
+                    [src]="item.beforeImage"
+                    [alt]="item.beforeAlt"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="photo-label avant">AVANT</span>
+                </div>
+                <div class="comparison-photo">
+                  <img
+                    [src]="item.afterImage"
+                    [alt]="item.afterAlt"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="photo-label apres">APRÈS</span>
+                </div>
+
+                <span class="zoom-hint" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" focusable="false">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                  </svg>
+                  Comparer
+                </span>
+              </div>
+
+              <div class="realisation-info">
+                <span class="realisation-icon" aria-hidden="true">
+                  @switch (item.icon) {
+                    @case ('construction') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5 12 3l9 7.5M5 9.5V20h14V9.5M9.5 20v-5.5h5V20" />
+                      </svg>
+                    }
+                    @case ('renovation') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.1-3.1a5 5 0 0 1-6.6 6.6L6.6 20.4a2.1 2.1 0 0 1-3-3l7.6-7.6a5 5 0 0 1 6.6-6.6l-3.1 3.1Z" />
+                      </svg>
+                    }
+                    @case ('peinture') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <rect x="3" y="4" width="14" height="5" rx="1.5" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 6.5h2a1.5 1.5 0 0 1 1.5 1.5v2a1.5 1.5 0 0 1-1.5 1.5h-7a1.5 1.5 0 0 0-1.5 1.5v2" />
+                        <rect x="9" y="15" width="3" height="6" rx="1" />
+                      </svg>
+                    }
+                    @case ('pavage') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <rect x="3" y="4" width="18" height="16" rx="2" />
+                        <path d="M3 9.5h18M3 14.5h18M9 4v5.5M15 9.5v5M9 14.5V20" />
+                      </svg>
+                    }
+                    @case ('jardins') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 20c1.5-5.5 6-10 14-12-1 8-5.5 12-12 12H5Z" />
+                        <path stroke-linecap="round" d="M5 20c2-3 5-5.5 9-7" />
+                      </svg>
+                    }
+                    @case ('piscine') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2 15.5c1.5 1 3.5 1 5 0s3.5-1 5 0 3.5 1 5 0 3.5-1 5 0M2 19.5c1.5 1 3.5 1 5 0s3.5-1 5 0 3.5 1 5 0 3.5-1 5 0" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12V6a2 2 0 0 1 4 0M15 12V6a2 2 0 0 1 4 0M8 9h7" />
+                      </svg>
+                    }
+                    @case ('dechets') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 19a4 4 0 0 1-3.5-6l2-3.5M17 19a4 4 0 0 0 3.5-6l-2-3.5M9.5 6.5 12 3l2.5 3.5M8 19h8" />
+                      </svg>
+                    }
+                    @case ('paysagement') {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-7m0 0c-3.5 0-6-2.2-6-5.5A5.5 5.5 0 0 1 12 3a5.5 5.5 0 0 1 6 5.5c0 3.3-2.5 5.5-6 5.5Z" />
+                        <path stroke-linecap="round" d="M6 21h12" />
+                      </svg>
+                    }
+                  }
+                </span>
+
+                <div class="realisation-meta">
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.tagline }}</p>
+                </div>
+
+                <span class="realisation-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" focusable="false">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
+            </button>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       6. CONTACT & FORMULAIRE DE SOUMISSION GRATUITE
+  ========================================================= -->
+  <section class="section section-alabaster contact-section" id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="contact-layout">
+        <!-- Panneau de coordonnées -->
+        <div class="contact-panel" data-reveal>
+          <p class="eyebrow eyebrow-light">
+            <span class="eyebrow-line" aria-hidden="true"></span>
+            CONTACTEZ-NOUS
+          </p>
+
+          <h2 id="contact-title" class="section-title section-title-light">
+            Parlons de votre <em>prochain projet.</em>
+          </h2>
+
+          <p class="contact-panel-lead">
+            Obtenez une soumission gratuite et sans engagement. Expliquez-nous votre besoin
+            et nous vous répondrons rapidement.
+          </p>
+
+          <div class="contact-cards">
+            <a class="contact-row" [href]="contact.phoneHref">
+              <span class="contact-row-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z" />
+                </svg>
+              </span>
+              <span>
+                <small>Téléphone</small>
+                <strong>{{ contact.phoneDisplay }}</strong>
+              </span>
+            </a>
+
+            <a class="contact-row" [href]="'mailto:' + contact.email">
+              <span class="contact-row-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m4 7 8 6 8-6" />
+                </svg>
+              </span>
+              <span>
+                <small>Courriel</small>
+                <strong>{{ contact.email }}</strong>
+              </span>
+            </a>
+
+            <a
+              class="contact-row"
+              [href]="contact.mapsUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="contact-row-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-5.686-7-11a7 7 0 1 1 14 0c0 5.314-7 11-7 11Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+              </span>
+              <span>
+                <small>Adresse</small>
+                <strong>{{ contact.addressStreet }}</strong>
+                <span class="contact-row-sub">{{ contact.addressCity }}</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="contact-panel-actions">
+            <a
+              class="btn btn-whatsapp btn-block"
+              [href]="whatsappDirectUrl()"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                <path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.49 0 .14 5.34.14 11.91c0 2.1.55 4.15 1.59 5.95L0 24l6.31-1.65a11.87 11.87 0 0 0 5.75 1.47h.01c6.57 0 11.92-5.34 11.92-11.91 0-3.18-1.24-6.17-3.47-8.43Zm-8.46 18.32h-.01a9.87 9.87 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.85 9.85 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.91-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.45-4.44 9.88-9.9 9.88Zm5.43-7.41c-.3-.15-1.76-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.21 5.09 4.5.71.31 1.27.49 1.7.63.71.23 1.36.2 1.88.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+              </svg>
+              <span>Discuter sur WhatsApp</span>
+            </a>
+          </div>
+
+          <div class="service-zone">
+            <span class="service-zone-dot" aria-hidden="true"></span>
+            <span>Interventions résidentielles à Montréal et dans le Grand Montréal</span>
+          </div>
+        </div>
+
+        <!-- Formulaire de demande de soumission -->
+        <div class="quote-card" data-reveal>
+          @if (quoteStatus() === 'sent' || quoteStatus() === 'ready') {
+            <div class="quote-confirmation" role="status" aria-live="polite">
+              <div class="confirm-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+
+              @if (quoteStatus() === 'sent') {
+                <h3>Votre demande a bien été transmise !</h3>
+                <p>
+                  Merci <strong>{{ quoteForm().name }}</strong>. Notre équipe a bien reçu les
+                  détails de votre projet et vous contactera très prochainement.
+                </p>
+              } @else {
+                <h3>Votre demande de soumission est prête !</h3>
+                <p>
+                  Choisissez votre canal préféré ci-dessous pour nous transmettre
+                  immédiatement votre demande pré-remplie :
+                </p>
+              }
+
+              @if (quoteErrorMessage()) {
+                <p class="form-alert">{{ quoteErrorMessage() }}</p>
+              }
+
+              <div class="confirm-actions">
+                <a
+                  class="btn btn-whatsapp btn-lg"
+                  [href]="quoteWhatsappUrl()"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Envoyer sur WhatsApp
+                </a>
+                <a class="btn btn-gold btn-lg" [href]="quoteMailtoUrl()">
+                  Envoyer par courriel
+                </a>
+              </div>
+
+              <div class="summary-box">
+                <div class="summary-box-head">
+                  <span>Récapitulatif de votre projet</span>
+                  <button type="button" class="copy-btn" (click)="copyQuoteSummary()">
+                    {{ copiedSummary() ? 'Copié ✓' : 'Copier' }}
+                  </button>
+                </div>
+                <pre>{{ quoteSummaryText() }}</pre>
+              </div>
+
+              <div class="confirm-secondary">
+                <button type="button" class="text-btn" (click)="editQuoteForm()">
+                  Modifier ma demande
+                </button>
+                <button type="button" class="text-btn" (click)="resetQuoteForm()">
+                  Nouvelle demande
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="quote-card-head">
+              <h3>Demande de soumission gratuite</h3>
+              <p>Remplissez ce formulaire en 1 minute pour recevoir une estimation adaptée.</p>
+            </div>
+
+            @if (preselectedNotice()) {
+              <div class="preselected-banner" role="status">
+                <span>Service sélectionné : <strong>{{ preselectedNotice() }}</strong></span>
+              </div>
+            }
+
+            <form class="quote-form" (submit)="submitQuote($event)" novalidate>
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="q-name">Nom complet <span aria-hidden="true">*</span></label>
+                  <input
+                    id="q-name"
+                    name="name"
+                    type="text"
+                    autocomplete="name"
+                    placeholder="Ex. Marc Tremblay"
+                    [value]="quoteForm().name"
+                    (input)="updateField('name', $event)"
+                    [attr.aria-invalid]="quoteErrors().name ? 'true' : null"
+                    [attr.aria-describedby]="quoteErrors().name ? 'err-name' : null"
+                    required
+                  />
+                  @if (quoteErrors().name) {
+                    <span id="err-name" class="field-error">{{ quoteErrors().name }}</span>
+                  }
+                </div>
+
+                <div class="form-field">
+                  <label for="q-phone">Téléphone <span aria-hidden="true">*</span></label>
+                  <input
+                    id="q-phone"
+                    name="phone"
+                    type="tel"
+                    autocomplete="tel"
+                    placeholder="Ex. 514 555-0192"
+                    [value]="quoteForm().phone"
+                    (input)="updateField('phone', $event)"
+                    [attr.aria-invalid]="quoteErrors().phone ? 'true' : null"
+                    [attr.aria-describedby]="quoteErrors().phone ? 'err-phone' : null"
+                    required
+                  />
+                  @if (quoteErrors().phone) {
+                    <span id="err-phone" class="field-error">{{ quoteErrors().phone }}</span>
+                  }
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="q-email">Courriel <span aria-hidden="true">*</span></label>
+                  <input
+                    id="q-email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="votre&#64;courriel.com"
+                    [value]="quoteForm().email"
+                    (input)="updateField('email', $event)"
+                    [attr.aria-invalid]="quoteErrors().email ? 'true' : null"
+                    [attr.aria-describedby]="quoteErrors().email ? 'err-email' : null"
+                    required
+                  />
+                  @if (quoteErrors().email) {
+                    <span id="err-email" class="field-error">{{ quoteErrors().email }}</span>
+                  }
+                </div>
+
+                <div class="form-field">
+                  <label for="q-service">Service souhaité <span aria-hidden="true">*</span></label>
+                  <select
+                    id="q-service"
+                    name="service"
+                    [value]="quoteForm().service"
+                    (change)="updateField('service', $event)"
+                    [attr.aria-invalid]="quoteErrors().service ? 'true' : null"
+                    [attr.aria-describedby]="quoteErrors().service ? 'err-service' : null"
+                    required
+                  >
+                    <option value="">Choisissez un service…</option>
+                    @for (service of services; track service.id) {
+                      <option [value]="service.title">{{ service.title }}</option>
+                    }
+                    <option value="Plusieurs services / Projet complet">
+                      Plusieurs services / Projet complet
+                    </option>
+                  </select>
+                  @if (quoteErrors().service) {
+                    <span id="err-service" class="field-error">{{ quoteErrors().service }}</span>
+                  }
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="q-area">Arrondissement ou ville</label>
+                  <input
+                    id="q-area"
+                    name="area"
+                    type="text"
+                    placeholder="Ex. Ahuntsic, Montréal, Laval…"
+                    [value]="quoteForm().area"
+                    (input)="updateField('area', $event)"
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label for="q-timeline">Échéancier souhaité</label>
+                  <select
+                    id="q-timeline"
+                    name="timeline"
+                    [value]="quoteForm().timeline"
+                    (change)="updateField('timeline', $event)"
+                  >
+                    @for (option of timelineOptions; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="q-message">Description de votre projet <span aria-hidden="true">*</span></label>
+                <textarea
+                  id="q-message"
+                  name="message"
+                  rows="4"
+                  placeholder="Précisez la nature des travaux, les dimensions approximatives ou toute information utile…"
+                  [value]="quoteForm().message"
+                  (input)="updateField('message', $event)"
+                  [attr.aria-invalid]="quoteErrors().message ? 'true' : null"
+                  [attr.aria-describedby]="quoteErrors().message ? 'err-message' : null"
+                  required
+                ></textarea>
+                @if (quoteErrors().message) {
+                  <span id="err-message" class="field-error">{{ quoteErrors().message }}</span>
+                }
+              </div>
+
+              <div class="form-submit-row">
+                <button
+                  type="submit"
+                  class="btn btn-gold btn-lg btn-block"
+                  [disabled]="quoteStatus() === 'submitting'"
+                >
+                  @if (quoteStatus() === 'submitting') {
+                    <span>Envoi en cours…</span>
+                  } @else {
+                    <span>Préparer ma soumission gratuite</span>
+                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+                    </svg>
+                  }
+                </button>
+                <p class="form-note">
+                  Sans engagement. Vos informations servent uniquement à répondre à votre demande.
+                </p>
+              </div>
+            </form>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- =========================================================
+     PIED DE PAGE ARCHITECTURAL
+========================================================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <a class="brand brand-light" href="#accueil">
+          <span class="brand-mark" aria-hidden="true">180</span>
+          <span class="brand-text">
+            <span class="brand-name">SERVICES À DOMICILE</span>
+            <span class="brand-city">MONTRÉAL</span>
+          </span>
         </a>
+        <p class="footer-tagline">
+          Votre partenaire résidentiel unique à Montréal pour vos travaux de construction,
+          rénovation, finition et entretien extérieur.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h3>Navigation</h3>
+        <ul>
+          @for (item of navItems; track item.id) {
+            <li><a [href]="'#' + item.id">{{ item.label }}</a></li>
+          }
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Nos services</h3>
+        <ul class="footer-services-list">
+          @for (service of services; track service.id) {
+            <li>
+              <button
+                type="button"
+                class="footer-link-btn"
+                (click)="requestQuoteForService(service.title)"
+              >
+                {{ service.title }}
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Coordonnées</h3>
+        <ul class="footer-contact-list">
+          <li><a [href]="contact.phoneHref">{{ contact.phoneDisplay }}</a></li>
+          <li><a [href]="'mailto:' + contact.email">{{ contact.email }}</a></li>
+          <li>
+            <a [href]="contact.mapsUrl" target="_blank" rel="noopener noreferrer">
+              {{ contact.addressStreet }}<br />
+              {{ contact.addressCity }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {{ currentYear }} {{ contact.companyName }}. Tous droits réservés.</p>
+      <p>Montréal, Québec</p>
+    </div>
+  </div>
+</footer>
+
+<!-- =========================================================
+     LIGHTBOX INTERACTIVE AVANT / APRÈS (CURSEUR + CÔTE À CÔTE)
+========================================================= -->
+@if (activeRealisation(); as project) {
+  <div
+    class="lightbox-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightbox-title"
+    (click)="closeLightbox()"
+  >
+    <div class="lightbox-dialog" (click)="$event.stopPropagation()">
+      <div class="lightbox-header">
+        <div>
+          <span class="lightbox-category">
+            {{ project.categoryLabel }} · {{ activeRealisationIndex() + 1 }} / {{ realisations.length }}
+          </span>
+          <h2 id="lightbox-title">{{ project.title }}</h2>
+        </div>
+
+        <div class="lightbox-controls">
+          <div class="mode-switch" role="group" aria-label="Mode d'affichage avant et après">
+            <button
+              type="button"
+              [class.is-active]="lightboxMode() === 'slider'"
+              (click)="setLightboxMode('slider')"
+            >
+              Curseur
+            </button>
+            <button
+              type="button"
+              [class.is-active]="lightboxMode() === 'split'"
+              (click)="setLightboxMode('split')"
+            >
+              Côte à côte
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="lightbox-close"
+            aria-label="Fermer la galerie"
+            (click)="closeLightbox()"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+              <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="lightbox-stage">
+        @if (lightboxMode() === 'slider') {
+          <div
+            class="compare-slider"
+            [style.--slider-pos]="sliderPosition() + '%'"
+          >
+            <img
+              class="compare-img compare-after"
+              [src]="project.afterImage"
+              [alt]="project.afterAlt"
+            />
+            <img
+              class="compare-img compare-before"
+              [src]="project.beforeImage"
+              [alt]="project.beforeAlt"
+            />
+
+            <span class="photo-label avant lightbox-badge-left">AVANT</span>
+            <span class="photo-label apres lightbox-badge-right">APRÈS</span>
+
+            <div class="compare-divider" aria-hidden="true">
+              <span class="compare-handle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" focusable="false">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m9 7-5 5 5 5M15 7l5 5-5 5" />
+                </svg>
+              </span>
+            </div>
+
+            <input
+              type="range"
+              min="0"
+              max="100"
+              [value]="sliderPosition()"
+              (input)="onSliderInput($event)"
+              class="compare-range"
+              [attr.aria-label]="'Glisser pour comparer ' + project.title + ' avant et après'"
+            />
+          </div>
+          <p class="slider-caption">Faites glisser le curseur de gauche à droite pour révéler la transformation.</p>
+        } @else {
+          <div class="lightbox-split">
+            <figure>
+              <img [src]="project.beforeImage" [alt]="project.beforeAlt" />
+              <figcaption class="photo-label avant">AVANT</figcaption>
+            </figure>
+            <figure>
+              <img [src]="project.afterImage" [alt]="project.afterAlt" />
+              <figcaption class="photo-label apres">APRÈS</figcaption>
+            </figure>
+          </div>
+        }
+      </div>
+
+      <div class="lightbox-footer">
+        <p class="lightbox-summary">{{ project.summary }}</p>
+
+        <div class="lightbox-footer-actions">
+          <div class="lightbox-nav">
+            <button
+              type="button"
+              class="btn btn-outline-light btn-sm"
+              (click)="navigateLightbox(-1)"
+              aria-label="Réalisation précédente"
+            >
+              ← Précédent
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-light btn-sm"
+              (click)="navigateLightbox(1)"
+              aria-label="Réalisation suivante"
+            >
+              Suivant →
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-gold btn-sm"
+            (click)="requestQuoteForService(project.title)"
+          >
+            Demander un devis pour ce service
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</main>
+}
 
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- =========================================================
+     ACTIONS FLOTTANTES (WHATSAPP + RETOUR EN HAUT)
+========================================================= -->
+<div class="floating-dock">
+  @if (showBackToTop()) {
+    <button
+      type="button"
+      class="back-to-top"
+      aria-label="Revenir en haut de la page"
+      (click)="scrollToTop()"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0-6 6m6-6 6 6" />
+      </svg>
+    </button>
+  }
 
-
-<router-outlet />
+  <a
+    class="whatsapp-fab"
+    [href]="whatsappDirectUrl()"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Contacter 180 Services à domicile sur WhatsApp"
+  >
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+      <path d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.49 0 .14 5.34.14 11.91c0 2.1.55 4.15 1.59 5.95L0 24l6.31-1.65a11.87 11.87 0 0 0 5.75 1.47h.01c6.57 0 11.92-5.34 11.92-11.91 0-3.18-1.24-6.17-3.47-8.43Zm-8.46 18.32h-.01a9.87 9.87 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.85 9.85 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.91-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.45-4.44 9.88-9.9 9.88Zm5.43-7.41c-.3-.15-1.76-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.21 5.09 4.5.71.31 1.27.49 1.7.63.71.23 1.36.2 1.88.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z" />
+    </svg>
+    <span class="whatsapp-fab-label">WhatsApp</span>
+  </a>
+</div>

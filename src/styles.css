@@ -2964,3 +2964,63 @@ section[id] {
     display: none;
   }
 }
+
+/* ==========================================================================
+   CORRECTION MOBILE — empêcher le texte de dépasser de l'écran
+   Cible l'en-tête de la section « Qui sommes-nous ? » sans modifier le desktop.
+========================================================================== */
+@media (max-width: 720px) {
+  .about-grid,
+  .about-grid > *,
+  .about-grid .section-head,
+  .about-grid .section-head > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .about-grid .section-title,
+  .about-grid .about-lead,
+  .about-grid .about-text,
+  .about-grid .section-subtitle {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .about-grid .section-title {
+    font-size: clamp(27px, 7.2vw, 34px);
+    line-height: 1.16;
+    letter-spacing: -0.035em;
+  }
+
+  .about-grid .section-title em {
+    white-space: normal;
+  }
+
+  .about-grid .about-lead {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .about-grid .about-text,
+  .about-grid .section-subtitle {
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+}
+
+/* Empêche un élément décoratif ou animé de créer un débordement global.
+   Le ruban d'expertise garde son propre défilement horizontal. */
+html,
+body {
+  max-width: 100%;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}

@@ -4,13 +4,11 @@
     <meta charset="utf-8" />
     <title>180 Services à domicile | Construction, Rénovation et Entretien à Montréal</title>
     <base href="/" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="180 Services" />
     <meta
       name="description"
       content="180 Services à domicile à Montréal : construction, rénovation, peinture, pavage, entretien de jardins, nettoyage de piscine, déchets verts et aménagement paysager. Soumission gratuite."
@@ -19,14 +17,47 @@
       name="keywords"
       content="construction Montréal, rénovation Montréal, peinture résidentielle, pavage Montréal, entretien de jardins, nettoyage de piscine, déchets verts, aménagement paysager Montréal, 180 Services à domicile"
     />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="author" content="180 Services à domicile" />
     <meta name="theme-color" content="#0b1526" />
     <meta name="geo.region" content="CA-QC" />
     <meta name="geo.placename" content="Montréal" />
+    <meta name="geo.position" content="45.5298;-73.6819" />
+    <meta name="ICBM" content="45.5298, -73.6819" />
+
+    <!-- URL canonique & indexation bilingue (hreflang FR-CA / EN-CA) -->
+    <link rel="canonical" href="https://momobylka1404.github.io/construction-montreal/" />
+    <link
+      rel="alternate"
+      hreflang="fr-CA"
+      href="https://momobylka1404.github.io/construction-montreal/"
+    />
+    <link
+      rel="alternate"
+      hreflang="fr"
+      href="https://momobylka1404.github.io/construction-montreal/"
+    />
+    <link
+      rel="alternate"
+      hreflang="en-CA"
+      href="https://momobylka1404.github.io/construction-montreal/en/"
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://momobylka1404.github.io/construction-montreal/en/"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://momobylka1404.github.io/construction-montreal/"
+    />
 
     <!-- Open Graph / Partage social -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://momobylka1404.github.io/construction-montreal/" />
     <meta property="og:locale" content="fr_CA" />
+    <meta property="og:locale:alternate" content="en_CA" />
     <meta property="og:site_name" content="180 Services à domicile" />
     <meta
       property="og:title"
@@ -34,26 +65,51 @@
     />
     <meta
       property="og:description"
-      content="Construction, rénovation, peinture, pavage, jardins, piscine et aménagement paysager à Montréal. Demandez votre soumission gratuite."
+      content="Construction, rénovation, peinture, pavage, jardins, piscine et aménagement paysager à Montréal et dans le Grand Montréal. Soumission gratuite en 24–48 h."
     />
     <meta
       property="og:image"
-      content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80&auto=format&fit=crop"
+      content="https://momobylka1404.github.io/construction-montreal/images/og-cover.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Résidence rénovée et aménagée à Montréal — 180 Services à domicile"
     />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="180 Services à domicile | Construction &amp; Rénovation à Montréal"
+      content="180 Services à domicile | Un seul partenaire pour tous vos projets à Montréal"
     />
     <meta
       name="twitter:description"
-      content="8 services résidentiels complets à Montréal, de la construction à l'aménagement paysager. Soumission gratuite."
+      content="Construction, rénovation, peinture, pavage, jardins, piscine et aménagement paysager à Montréal et dans le Grand Montréal. Soumission gratuite en 24–48 h."
+    />
+    <meta
+      name="twitter:image"
+      content="https://momobylka1404.github.io/construction-montreal/images/og-cover.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Résidence rénovée et aménagée à Montréal — 180 Services à domicile"
     />
 
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="96x96" href="icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
     <link rel="manifest" href="manifest.webmanifest" />
+
+    <!-- Préchargement prioritaire de l'image Hero (optimisation LCP & hors ligne PWA) -->
+    <link
+      rel="preload"
+      as="image"
+      href="images/hero-montreal.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
 
     <!-- Typographie éditoriale (fallback système instantané hors ligne / PWA) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -63,15 +119,29 @@
       rel="stylesheet"
     />
 
-    <!-- Données structurées SEO local Montréal (Schema.org) -->
-    <script type="application/ld+json">
+    <!-- Données structurées SEO local Montréal (Schema.org HomeAndConstructionBusiness) -->
+    <script id="schema-business" type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "HomeAndConstructionBusiness",
+        "@id": "https://momobylka1404.github.io/construction-montreal/#organization",
         "name": "180 Services à domicile",
-        "description": "Entreprise de construction, rénovation, peinture, pavage, entretien extérieur et aménagement paysager résidentiel à Montréal.",
+        "alternateName": "180 Home Services",
+        "url": "https://momobylka1404.github.io/construction-montreal/",
+        "inLanguage": "fr-CA",
+        "description": "180 Services à domicile à Montréal : construction, rénovation, peinture, pavage, entretien de jardins, nettoyage de piscine, déchets verts et aménagement paysager. Soumission gratuite.",
+        "logo": "https://momobylka1404.github.io/construction-montreal/icons/icon-512x512.png",
+        "image": [
+          "https://momobylka1404.github.io/construction-montreal/images/og-cover.jpg",
+          "https://momobylka1404.github.io/construction-montreal/images/hero-montreal.webp",
+          "https://momobylka1404.github.io/construction-montreal/images/apropos-residence.webp"
+        ],
         "telephone": "+1-514-823-3467",
         "email": "180servicesenr@gmail.com",
+        "priceRange": "$$",
+        "currenciesAccepted": "CAD",
+        "availableLanguage": ["fr-CA", "en-CA"],
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=10275+rue+Romuald-Trudeau+Montreal+QC+H4N+2X5",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "10275 rue Romuald-Trudeau",
@@ -80,24 +150,164 @@
           "postalCode": "H4N 2X5",
           "addressCountry": "CA"
         },
-        "areaServed": {
-          "@type": "City",
-          "name": "Montréal"
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 45.5298,
+          "longitude": -73.6819
+        },
+        "serviceArea": {
+          "@type": "GeoCircle",
+          "geoMidpoint": {
+            "@type": "GeoCoordinates",
+            "latitude": 45.5298,
+            "longitude": -73.6819
+          },
+          "geoRadius": 35000
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Montréal" },
+          { "@type": "AdministrativeArea", "name": "Saint-Laurent" },
+          { "@type": "AdministrativeArea", "name": "Ahuntsic-Cartierville" },
+          { "@type": "AdministrativeArea", "name": "Rosemont–La Petite-Patrie" },
+          { "@type": "AdministrativeArea", "name": "Le Plateau-Mont-Royal" },
+          { "@type": "AdministrativeArea", "name": "Villeray–Saint-Michel–Parc-Extension" },
+          { "@type": "AdministrativeArea", "name": "Verdun" },
+          { "@type": "AdministrativeArea", "name": "Côte-des-Neiges–Notre-Dame-de-Grâce" },
+          { "@type": "AdministrativeArea", "name": "Lachine" },
+          { "@type": "AdministrativeArea", "name": "Mercier–Hochelaga-Maisonneuve" },
+          { "@type": "AdministrativeArea", "name": "Anjou" },
+          { "@type": "City", "name": "Mont-Royal" },
+          { "@type": "City", "name": "Westmount" },
+          { "@type": "City", "name": "Laval" },
+          { "@type": "City", "name": "Longueuil" },
+          { "@type": "City", "name": "Brossard" }
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "07:30",
+            "closes": "19:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Saturday"],
+            "opens": "08:00",
+            "closes": "17:00"
+          }
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-514-823-3467",
+          "email": "180servicesenr@gmail.com",
+          "areaServed": "CA-QC",
+          "availableLanguage": ["French", "English"]
         },
         "hasOfferCatalog": {
           "@type": "OfferCatalog",
           "name": "Services résidentiels à Montréal",
           "itemListElement": [
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Construction résidentielle" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Rénovation intérieure et extérieure" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Peinture intérieure et extérieure" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pavage et aménagements d'entrées" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Entretien de jardins" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nettoyage de piscine" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ramassage de déchets verts" } },
-            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Aménagement paysager" } }
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Construction résidentielle" }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Rénovation intérieure et extérieure" }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Peinture intérieure et extérieure" }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Pavage et aménagements d'entrées" }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Entretien de jardins" }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Nettoyage de piscine" }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Ramassage de déchets verts" }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": { "@type": "Service", "name": "Aménagement paysager" }
+            }
           ]
         }
+      }
+    </script>
+
+    <!-- Données structurées FAQ (Schema.org FAQPage) -->
+    <script id="schema-faq" type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "La soumission est-elle vraiment gratuite et sans engagement ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Oui, entièrement. Après réception de votre demande, nous vous répondons habituellement en 24 à 48 heures. Au besoin, nous planifions une visite sur place afin d’évaluer précisément les travaux et de vous remettre une estimation claire, détaillée et sans aucune obligation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quels arrondissements et quelles villes desservez-vous ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Basés dans l’arrondissement de Saint-Laurent à Montréal, nous intervenons dans l’ensemble de l’île de Montréal (Ahuntsic, Rosemont, Villeray, Plateau-Mont-Royal, Verdun, NDG, Lachine, Anjou, Mercier, Ouest-de-l’Île, etc.) ainsi qu’à Laval et sur la Rive-Sud."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Puis-je combiner plusieurs services dans une seule soumission ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolument — c’est même notre plus grande force. Vous pouvez regrouper, par exemple, une rénovation intérieure avec la peinture complète, ou un projet de pavage avec l’aménagement paysager, l’entretien du jardin et l’évacuation des déchets verts, le tout coordonné par un seul partenaire."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quels sont vos délais pour commencer les travaux ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pour les services d’entretien extérieur (jardins, nettoyage de piscine, ramassage de déchets verts) et la peinture, nous pouvons souvent intervenir en quelques jours. Pour la construction, la rénovation et le pavage, nous convenons avec vous d’un échéancier réaliste dès la validation de la soumission."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Comment assurez-vous la qualité, la sécurité et la propreté du chantier ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Chaque intervention est couverte et réalisée dans le respect des règles de l’art, avec des matériaux adaptés au climat québécois. Nous protégeons soigneusement vos planchers, meubles et accès, assurons un nettoyage complet en fin de travaux et effectuons une vérification finale avec vous pour garantir votre entière satisfaction."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Offrez-vous des interventions ponctuelles ou un entretien saisonnier régulier ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nous offrons les deux formules selon vos besoins : interventions ponctuelles (ouverture ou nettoyage de piscine, grand ménage printanier, ramassage automnal de feuilles et branches) ou passages réguliers tout au long de la belle saison pour garder votre terrain et votre piscine impeccables."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quelles informations fournir pour obtenir une estimation rapide et précise ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Indiquez le ou les services souhaités, votre arrondissement ou ville, l’échéancier visé et une brève description des travaux (dimensions approximatives, état actuel). Vous pouvez aussi joindre jusqu’à 4 photos directement dans notre formulaire ou par WhatsApp pour accélérer l’évaluation."
+            }
+          }
+        ]
       }
     </script>
   </head>

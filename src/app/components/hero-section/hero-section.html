@@ -1,0 +1,96 @@
+<section class="hero" id="accueil" aria-labelledby="hero-title">
+  <div class="hero-media" aria-hidden="true">
+    <img
+      class="hero-media-img"
+      src="images/hero-montreal.webp"
+      alt=""
+      width="1600"
+      height="1000"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </div>
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <p class="eyebrow eyebrow-light">
+        <span class="eyebrow-line" aria-hidden="true"></span>
+        {{ i18n.t().hero.eyebrow }}
+      </p>
+
+      <h1 id="hero-title" class="hero-title">
+        {{ i18n.t().hero.titleMain }}
+        <span class="hero-title-accent">{{ i18n.t().hero.titleAccent }}</span>
+      </h1>
+
+      <p class="hero-lead">{{ i18n.t().hero.lead }}</p>
+
+      <div class="hero-actions">
+        <a
+          [href]="i18n.sectionHref('contact')"
+          (click)="onSectionClick($event, 'contact')"
+          class="btn btn-gold btn-lg"
+        >
+          <span>{{ i18n.t().hero.primaryCta }}</span>
+          <svg
+            class="icon-sm"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+          </svg>
+        </a>
+
+        <a
+          [href]="i18n.sectionHref('services')"
+          (click)="onSectionClick($event, 'services')"
+          class="btn btn-ghost-light btn-lg"
+        >
+          {{ i18n.t().hero.secondaryCta }}
+        </a>
+      </div>
+
+      <div class="hero-direct">
+        <span>{{ i18n.t().hero.quickLabel }}</span>
+        <a [href]="config.phoneHref">{{ config.phoneDisplay }}</a>
+        <span class="dot-sep" aria-hidden="true">•</span>
+        <a [href]="i18n.whatsappDirectUrl()" target="_blank" rel="noopener noreferrer">
+          {{ i18n.t().hero.whatsappDirect }}
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-pillars">
+      @for (pillar of i18n.t().hero.pillars; track $index) {
+        <div class="pillar-item">
+          <strong class="pillar-title">{{ pillar.title }}</strong>
+          <span class="pillar-detail">{{ pillar.detail }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <a
+    [href]="i18n.sectionHref('services')"
+    (click)="onSectionClick($event, 'services')"
+    class="scroll-cue"
+    [attr.aria-label]="i18n.t().a11y.scrollToServices"
+  >
+    <span>{{ i18n.t().hero.scrollCue }}</span>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0-5-5m5 5 5-5" />
+    </svg>
+  </a>
+</section>

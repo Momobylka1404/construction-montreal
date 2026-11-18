@@ -1,0 +1,96 @@
+<section class="section section-white faq-section" id="faq" aria-labelledby="faq-title">
+  <div class="container">
+    <div class="faq-layout">
+      <div class="faq-aside" data-reveal>
+        <p class="eyebrow">
+          <span class="eyebrow-line" aria-hidden="true"></span>
+          {{ i18n.t().faqSection.eyebrow }}
+        </p>
+
+        <h2 id="faq-title" class="section-title">
+          {{ i18n.t().faqSection.titleMain }} <em>{{ i18n.t().faqSection.titleAccent }}</em>
+        </h2>
+
+        <p class="section-subtitle">{{ i18n.t().faqSection.subtitle }}</p>
+
+        <div class="faq-support-card">
+          <span class="faq-support-eyebrow">{{ i18n.t().faqSection.cardEyebrow }}</span>
+          <h3>{{ i18n.t().faqSection.cardTitle }}</h3>
+          <p>{{ i18n.t().faqSection.cardText }}</p>
+
+          <div class="faq-support-actions">
+            <a class="btn btn-gold btn-block" [href]="config.phoneHref">
+              <svg
+                class="icon-sm"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"
+                />
+              </svg>
+              <span>{{ i18n.t().faqSection.cardCallCta }}</span>
+            </a>
+
+            <a
+              class="btn btn-outline-light btn-block"
+              [href]="i18n.whatsappDirectUrl()"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>{{ i18n.t().faqSection.cardWhatsappCta }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-list" data-reveal>
+        @for (item of i18n.t().faqSection.items; track item.id) {
+          <article class="faq-item" [class.is-open]="openFaqId() === item.id">
+            <h3 class="faq-question-heading">
+              <button
+                type="button"
+                class="faq-trigger"
+                [id]="'faq-btn-' + item.id"
+                [attr.aria-expanded]="openFaqId() === item.id"
+                [attr.aria-controls]="'faq-panel-' + item.id"
+                (click)="toggle(item.id)"
+              >
+                <span class="faq-question-text">{{ item.question }}</span>
+                <span class="faq-toggle-icon" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    focusable="false"
+                  >
+                    <path stroke-linecap="round" d="M12 5v14M5 12h14" />
+                  </svg>
+                </span>
+              </button>
+            </h3>
+
+            <div
+              class="faq-panel"
+              [id]="'faq-panel-' + item.id"
+              role="region"
+              [attr.aria-labelledby]="'faq-btn-' + item.id"
+              [attr.aria-hidden]="openFaqId() !== item.id"
+            >
+              <div class="faq-panel-inner">
+                <p>{{ item.answer }}</p>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </div>
+</section>

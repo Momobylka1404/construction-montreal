@@ -1,0 +1,111 @@
+<section class="section section-white" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head section-head-split" data-reveal>
+      <div>
+        <p class="eyebrow">
+          <span class="eyebrow-line" aria-hidden="true"></span>
+          {{ i18n.t().servicesSection.eyebrow }}
+        </p>
+        <h2 id="services-title" class="section-title">
+          {{ i18n.t().servicesSection.titleMain }}
+          <em>{{ i18n.t().servicesSection.titleAccent }}</em>
+        </h2>
+      </div>
+
+      <div class="section-head-aside">
+        <p class="section-subtitle">{{ i18n.t().servicesSection.subtitle }}</p>
+
+        <div class="filter-tabs" role="tablist" [attr.aria-label]="i18n.t().a11y.filterServices">
+          <button
+            type="button"
+            role="tab"
+            class="filter-tab"
+            [class.is-active]="filter() === 'all'"
+            [attr.aria-selected]="filter() === 'all'"
+            (click)="setFilter('all')"
+          >
+            {{ i18n.t().servicesSection.filterAll }} <span>({{ counts().all }})</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="filter-tab"
+            [class.is-active]="filter() === 'batiment'"
+            [attr.aria-selected]="filter() === 'batiment'"
+            (click)="setFilter('batiment')"
+          >
+            {{ i18n.t().servicesSection.filterBuilding }} <span>({{ counts().batiment }})</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="filter-tab"
+            [class.is-active]="filter() === 'exterieur'"
+            [attr.aria-selected]="filter() === 'exterieur'"
+            (click)="setFilter('exterieur')"
+          >
+            {{ i18n.t().servicesSection.filterExterior }} <span>({{ counts().exterieur }})</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="services-grid" data-reveal>
+      @for (service of filteredServices(); track service.id) {
+        <article class="service-card">
+          <div class="service-media">
+            <img
+              [src]="service.image"
+              [alt]="service.alt"
+              loading="lazy"
+              decoding="async"
+              width="600"
+              height="375"
+            />
+            <span class="service-index">{{ service.number }}</span>
+            <span class="service-badge">{{ service.categoryLabel }}</span>
+          </div>
+
+          <div class="service-body">
+            <h3>{{ service.title }}</h3>
+            <p class="service-desc">{{ service.description }}</p>
+
+            <ul class="service-list">
+              @for (point of service.highlights; track $index) {
+                <li>
+                  <svg
+                    class="check-icon"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 8 14l7.5-8" />
+                  </svg>
+                  <span>{{ point }}</span>
+                </li>
+              }
+            </ul>
+
+            <button type="button" class="service-cta" (click)="requestQuote.emit(service.id)">
+              <span>{{ i18n.t().servicesSection.cardCta }}</span>
+              <svg
+                class="icon-xs"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

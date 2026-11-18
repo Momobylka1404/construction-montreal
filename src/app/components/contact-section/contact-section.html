@@ -1,0 +1,578 @@
+<section
+  class="section section-alabaster contact-section"
+  id="contact"
+  aria-labelledby="contact-title"
+>
+  <div class="container">
+    <div class="contact-layout">
+      <!-- Panneau de coordonnées -->
+      <div class="contact-panel" data-reveal>
+        <p class="eyebrow eyebrow-light">
+          <span class="eyebrow-line" aria-hidden="true"></span>
+          {{ i18n.t().contactSection.eyebrow }}
+        </p>
+
+        <h2 id="contact-title" class="section-title section-title-light">
+          {{ i18n.t().contactSection.titleMain }} <em>{{ i18n.t().contactSection.titleAccent }}</em>
+        </h2>
+
+        <p class="contact-panel-lead">{{ i18n.t().contactSection.lead }}</p>
+
+        <div class="contact-cards">
+          <a class="contact-row" [href]="config.phoneHref">
+            <span class="contact-row-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"
+                />
+              </svg>
+            </span>
+            <span>
+              <small>{{ i18n.t().contactSection.phoneLabel }}</small>
+              <strong>{{ config.phoneDisplay }}</strong>
+            </span>
+          </a>
+
+          <a class="contact-row" [href]="'mailto:' + config.email">
+            <span class="contact-row-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                focusable="false"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4 7 8 6 8-6" />
+              </svg>
+            </span>
+            <span>
+              <small>{{ i18n.t().contactSection.emailLabel }}</small>
+              <strong>{{ config.email }}</strong>
+            </span>
+          </a>
+
+          <a class="contact-row" [href]="config.mapsUrl" target="_blank" rel="noopener noreferrer">
+            <span class="contact-row-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 21s-7-5.686-7-11a7 7 0 1 1 14 0c0 5.314-7 11-7 11Z"
+                />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+            </span>
+            <span>
+              <small>{{ i18n.t().contactSection.addressLabel }}</small>
+              <strong>{{ i18n.t().contactSection.addressStreet }}</strong>
+              <span class="contact-row-sub">{{ i18n.t().contactSection.addressCity }}</span>
+            </span>
+          </a>
+        </div>
+
+        <div class="contact-panel-actions">
+          <a
+            class="btn btn-whatsapp btn-block"
+            [href]="i18n.whatsappDirectUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              class="icon-sm"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M20.52 3.48A11.86 11.86 0 0 0 12.06 0C5.49 0 .14 5.34.14 11.91c0 2.1.55 4.15 1.59 5.95L0 24l6.31-1.65a11.87 11.87 0 0 0 5.75 1.47h.01c6.57 0 11.92-5.34 11.92-11.91 0-3.18-1.24-6.17-3.47-8.43Zm-8.46 18.32h-.01a9.87 9.87 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.85 9.85 0 0 1-1.52-5.26c0-5.45 4.44-9.89 9.91-9.89 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c0 5.45-4.44 9.88-9.9 9.88Zm5.43-7.41c-.3-.15-1.76-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.21 5.09 4.5.71.31 1.27.49 1.7.63.71.23 1.36.2 1.88.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35Z"
+              />
+            </svg>
+            <span>{{ i18n.t().contactSection.whatsappCta }}</span>
+          </a>
+        </div>
+
+        <div class="service-zone">
+          <span class="service-zone-dot" aria-hidden="true"></span>
+          <span>{{ i18n.t().contactSection.serviceZone }}</span>
+        </div>
+      </div>
+
+      <!-- Formulaire de demande de soumission -->
+      <div class="quote-card" data-reveal>
+        @if (status() === 'sent' || status() === 'ready') {
+          <div class="quote-confirmation" role="status" aria-live="polite">
+            <div class="confirm-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                focusable="false"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+
+            @if (status() === 'sent') {
+              <h3>{{ i18n.t().form.confirm.sentTitle }}</h3>
+              <p>
+                {{ i18n.t().form.confirm.sentPrefix }} <strong>{{ form().name }}</strong>.
+                {{ i18n.t().form.confirm.sentSuffix }}
+              </p>
+            } @else {
+              <h3>{{ i18n.t().form.confirm.readyTitle }}</h3>
+              <p>{{ i18n.t().form.confirm.readyText }}</p>
+            }
+
+            @if (showFallbackAlert()) {
+              <p class="form-alert">{{ i18n.t().form.errors.endpointFallback }}</p>
+            }
+
+            <div class="confirm-actions">
+              <a
+                class="btn btn-whatsapp btn-lg"
+                [href]="quoteWhatsappUrl()"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ i18n.t().form.confirm.sendWhatsapp }}
+              </a>
+              <a class="btn btn-gold btn-lg" [href]="quoteMailtoUrl()">
+                {{ i18n.t().form.confirm.sendEmail }}
+              </a>
+            </div>
+
+            @if (canNativeSharePhotos()) {
+              <button type="button" class="btn btn-navy btn-block" (click)="shareQuoteWithPhotos()">
+                <svg
+                  class="icon-sm"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M16 8l-4-4-4 4M12 4v12"
+                  />
+                </svg>
+                <span
+                  >{{ i18n.t().form.confirm.shareWithPhotos }} ({{ attachedPhotos().length }})</span
+                >
+              </button>
+            }
+
+            @if (attachedPhotos().length > 0 && status() === 'ready') {
+              <div class="confirm-photos-note">
+                <svg
+                  class="icon-sm"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <circle cx="8.5" cy="10" r="1.5" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m21 15-5-5L5 19" />
+                </svg>
+                <span>{{ i18n.t().form.confirm.photosReminder }}</span>
+              </div>
+            }
+
+            <div class="summary-box">
+              <div class="summary-box-head">
+                <span>{{ i18n.t().form.confirm.summaryTitle }}</span>
+                <button type="button" class="copy-btn" (click)="copySummary()">
+                  {{ copiedSummary() ? i18n.t().form.confirm.copied : i18n.t().form.confirm.copy }}
+                </button>
+              </div>
+              <pre>{{ summaryText() }}</pre>
+            </div>
+
+            <div class="confirm-secondary">
+              <button type="button" class="text-btn" (click)="editForm()">
+                {{ i18n.t().form.confirm.edit }}
+              </button>
+              <button type="button" class="text-btn" (click)="resetForm()">
+                {{ i18n.t().form.confirm.reset }}
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="quote-card-head">
+            <h3>{{ i18n.t().form.heading }}</h3>
+            <p>{{ i18n.t().form.subtitle }}</p>
+          </div>
+
+          @if (preselectedServiceLabel()) {
+            <div class="preselected-banner" role="status">
+              <span>
+                {{ i18n.t().form.preselectedPrefix }}
+                <strong>{{ preselectedServiceLabel() }}</strong>
+              </span>
+            </div>
+          }
+
+          <form class="quote-form" (submit)="submitQuote($event)" novalidate>
+            <!-- Champ anti-spam invisible (honeypot) -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="q-website">{{ i18n.t().form.honeypotLabel }}</label>
+              <input
+                id="q-website"
+                name="website"
+                type="text"
+                tabindex="-1"
+                autocomplete="off"
+                [value]="form().honeypot"
+                (input)="updateField('honeypot', $event)"
+              />
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="q-name"
+                  >{{ i18n.t().form.nameLabel }} <span aria-hidden="true">*</span></label
+                >
+                <input
+                  id="q-name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  [placeholder]="i18n.t().form.namePlaceholder"
+                  [value]="form().name"
+                  (input)="updateField('name', $event)"
+                  [attr.aria-invalid]="errors().name ? 'true' : null"
+                  [attr.aria-describedby]="errors().name ? 'err-name' : null"
+                  required
+                />
+                @if (errors().name) {
+                  <span id="err-name" class="field-error">{{ errors().name }}</span>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="q-phone"
+                  >{{ i18n.t().form.phoneLabel }} <span aria-hidden="true">*</span></label
+                >
+                <input
+                  id="q-phone"
+                  name="phone"
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="tel"
+                  [placeholder]="i18n.t().form.phonePlaceholder"
+                  [value]="form().phone"
+                  (input)="updateField('phone', $event)"
+                  [attr.aria-invalid]="errors().phone ? 'true' : null"
+                  [attr.aria-describedby]="errors().phone ? 'err-phone' : null"
+                  required
+                />
+                @if (errors().phone) {
+                  <span id="err-phone" class="field-error">{{ errors().phone }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="q-email"
+                  >{{ i18n.t().form.emailLabel }} <span aria-hidden="true">*</span></label
+                >
+                <input
+                  id="q-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  [placeholder]="i18n.t().form.emailPlaceholder"
+                  [value]="form().email"
+                  (input)="updateField('email', $event)"
+                  [attr.aria-invalid]="errors().email ? 'true' : null"
+                  [attr.aria-describedby]="errors().email ? 'err-email' : null"
+                  required
+                />
+                @if (errors().email) {
+                  <span id="err-email" class="field-error">{{ errors().email }}</span>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="q-service"
+                  >{{ i18n.t().form.serviceLabel }} <span aria-hidden="true">*</span></label
+                >
+                <select
+                  id="q-service"
+                  name="service"
+                  [value]="form().serviceId"
+                  (change)="updateField('serviceId', $event)"
+                  [attr.aria-invalid]="errors().serviceId ? 'true' : null"
+                  [attr.aria-describedby]="errors().serviceId ? 'err-service' : null"
+                  required
+                >
+                  <option value="">{{ i18n.t().form.servicePlaceholder }}</option>
+                  @for (service of i18n.t().services; track service.id) {
+                    <option [value]="service.id">{{ service.title }}</option>
+                  }
+                  <option value="multi">{{ i18n.t().form.multiServiceOption }}</option>
+                </select>
+                @if (errors().serviceId) {
+                  <span id="err-service" class="field-error">{{ errors().serviceId }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="q-area">{{ i18n.t().form.areaLabel }}</label>
+                <input
+                  id="q-area"
+                  name="area"
+                  type="text"
+                  [placeholder]="i18n.t().form.areaPlaceholder"
+                  [value]="form().area"
+                  (input)="updateField('area', $event)"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="q-timeline">{{ i18n.t().form.timelineLabel }}</label>
+                <select
+                  id="q-timeline"
+                  name="timeline"
+                  [value]="form().timeline"
+                  (change)="updateField('timeline', $event)"
+                >
+                  @for (key of timelineKeys; track key) {
+                    <option [value]="key">{{ i18n.t().form.timelines[key] }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="q-budget">
+                  {{ i18n.t().form.budgetLabel }}
+                  <small class="label-optional">{{ i18n.t().form.budgetOptional }}</small>
+                </label>
+                <select
+                  id="q-budget"
+                  name="budget"
+                  [value]="form().budget"
+                  (change)="updateField('budget', $event)"
+                >
+                  @for (key of budgetKeys; track key) {
+                    <option [value]="key">{{ i18n.t().form.budgets[key] }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-field">
+                <span class="field-label" id="q-contact-method-label">
+                  {{ i18n.t().form.preferredContactLabel }}
+                </span>
+                <div
+                  class="contact-method-group"
+                  role="group"
+                  aria-labelledby="q-contact-method-label"
+                >
+                  @for (method of contactMethodKeys; track method) {
+                    <button
+                      type="button"
+                      class="contact-method-pill"
+                      [class.is-active]="form().preferredContact === method"
+                      [attr.aria-pressed]="form().preferredContact === method"
+                      (click)="setPreferredContact(method)"
+                    >
+                      {{ i18n.t().form.contactMethods[method] }}
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="q-message"
+                >{{ i18n.t().form.messageLabel }} <span aria-hidden="true">*</span></label
+              >
+              <textarea
+                id="q-message"
+                name="message"
+                rows="4"
+                [placeholder]="i18n.t().form.messagePlaceholder"
+                [value]="form().message"
+                (input)="updateField('message', $event)"
+                [attr.aria-invalid]="errors().message ? 'true' : null"
+                [attr.aria-describedby]="errors().message ? 'err-message' : null"
+                required
+              ></textarea>
+              @if (errors().message) {
+                <span id="err-message" class="field-error">{{ errors().message }}</span>
+              }
+            </div>
+
+            <!-- Pièces jointes optionnelles : photos du chantier -->
+            <div class="form-field">
+              <div class="field-label-row">
+                <label for="q-photos">
+                  {{ i18n.t().form.photosLabel }}
+                  <small class="label-optional">{{ i18n.t().form.photosOptional }}</small>
+                </label>
+                @if (attachedPhotos().length > 0) {
+                  <span class="photo-count-badge">
+                    {{ attachedPhotos().length }} / {{ maxQuotePhotos }}
+                  </span>
+                }
+              </div>
+
+              @if (attachedPhotos().length < maxQuotePhotos) {
+                <label class="photo-dropzone" for="q-photos">
+                  <input
+                    id="q-photos"
+                    name="photos"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    class="photo-file-input"
+                    (change)="onPhotosSelected($event)"
+                    [attr.aria-describedby]="errors().photos ? 'err-photos' : 'q-photos-hint'"
+                  />
+                  <span class="photo-dropzone-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      focusable="false"
+                    >
+                      <rect x="3" y="5" width="18" height="14" rx="2" />
+                      <circle cx="8.5" cy="10" r="1.5" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m21 15-5-5L5 19" />
+                    </svg>
+                  </span>
+                  <span class="photo-dropzone-text">
+                    <strong>{{ i18n.t().form.photosButton }}</strong>
+                    <small id="q-photos-hint">{{ i18n.t().form.photosHint }}</small>
+                  </span>
+                </label>
+              }
+
+              @if (attachedPhotos().length > 0) {
+                <ul class="photo-preview-list">
+                  @for (photo of attachedPhotos(); track photo.id) {
+                    <li class="photo-preview-item">
+                      <img [src]="photo.previewUrl" [alt]="photo.name" />
+                      <div class="photo-preview-meta">
+                        <span class="photo-preview-name">{{ photo.name }}</span>
+                        <small>{{ photo.sizeLabel }}</small>
+                      </div>
+                      <button
+                        type="button"
+                        class="photo-remove-btn"
+                        (click)="removePhoto(photo.id)"
+                        [attr.aria-label]="i18n.t().a11y.removePhoto + ' : ' + photo.name"
+                      >
+                        <svg
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <path stroke-linecap="round" d="M5 5l10 10M15 5L5 15" />
+                        </svg>
+                      </button>
+                    </li>
+                  }
+                </ul>
+              }
+
+              @if (errors().photos) {
+                <span id="err-photos" class="field-error">{{ errors().photos }}</span>
+              }
+            </div>
+
+            <!-- Consentement Loi 25 (Québec) -->
+            <div class="form-field consent-field" [class.has-error]="!!errors().consent">
+              <div class="consent-row">
+                <input
+                  id="q-consent"
+                  name="consent"
+                  type="checkbox"
+                  class="consent-checkbox"
+                  [checked]="form().consent"
+                  (change)="toggleConsent($event)"
+                  [attr.aria-invalid]="errors().consent ? 'true' : null"
+                  [attr.aria-describedby]="errors().consent ? 'err-consent' : null"
+                  required
+                />
+                <div class="consent-text">
+                  <label class="consent-inline-label" for="q-consent">
+                    {{ i18n.t().form.consentPrefix }}
+                  </label>
+                  <button type="button" class="inline-policy-link" (click)="openPrivacy.emit()">
+                    {{ i18n.t().form.consentLink }}</button>{{ i18n.t().form.consentSuffix }}
+                  <span class="consent-required" aria-hidden="true">*</span>
+                </div>
+              </div>
+              @if (errors().consent) {
+                <span id="err-consent" class="field-error">{{ errors().consent }}</span>
+              }
+            </div>
+
+            <div class="form-submit-row">
+              <button
+                type="submit"
+                class="btn btn-gold btn-lg btn-block"
+                [disabled]="status() === 'submitting'"
+              >
+                @if (status() === 'submitting') {
+                  <span>{{ i18n.t().form.submitLoading }}</span>
+                } @else {
+                  <span>{{ i18n.t().form.submitIdle }}</span>
+                  <svg
+                    class="icon-sm"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M5 12h14m-6-6 6 6-6 6"
+                    />
+                  </svg>
+                }
+              </button>
+              <p class="form-note">{{ i18n.t().form.privacyNote }}</p>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</section>

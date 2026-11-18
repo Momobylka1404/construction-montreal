@@ -1,0 +1,563 @@
+/* ==========================================================================
+   13. EFFETS DE SURVOL (APPAREILS AVEC POINTEUR FIN UNIQUEMENT)
+========================================================================== */
+@media (hover: hover) and (pointer: fine) {
+  .service-card:hover,
+  .realisation-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(212, 161, 59, 0.45);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .service-card:hover .service-media img,
+  .realisation-card:hover .comparison-photo img {
+    transform: scale(1.055);
+  }
+
+  .realisation-card:hover .zoom-hint {
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+
+  .realisation-card:hover .realisation-arrow {
+    transform: translateX(4px);
+  }
+}
+
+/* ==========================================================================
+   14. ADAPTATION RESPONSIVE
+========================================================================== */
+@media (max-width: 1200px) {
+  .services-grid,
+  .realisations-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .top-bar,
+  .desktop-nav,
+  .header-phone {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .section-head-split,
+  .about-grid,
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-pillars,
+  .process-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scroll-cue {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .header-inner {
+    min-height: 70px;
+  }
+
+  .header-cta {
+    display: none;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-block: 60px 52px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .hero-pillars,
+  .process-grid,
+  .services-grid,
+  .realisations-grid,
+  .form-row,
+  .confirm-actions,
+  .footer-grid,
+  .lightbox-split {
+    grid-template-columns: 1fr;
+  }
+
+  .about-visual {
+    padding: 0;
+  }
+
+  .about-frame::before {
+    display: none;
+  }
+
+  .about-floating-card {
+    max-width: none;
+    margin: 16px 0 0;
+  }
+
+  .lightbox-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lightbox-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .lightbox-footer-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lightbox-nav {
+    justify-content: space-between;
+  }
+
+  .floating-dock {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .whatsapp-fab {
+    width: 54px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .whatsapp-fab-label {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .header-inner {
+    gap: 10px;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-mark {
+    min-width: 42px;
+    height: 38px;
+    font-size: 17px;
+  }
+
+  .brand-name {
+    font-size: 10px;
+    letter-spacing: 0.07em;
+  }
+
+  .brand-city {
+    font-size: 9px;
+  }
+
+  .lang-btn {
+    min-width: 30px;
+    min-height: 28px;
+    padding: 4px 7px;
+    font-size: 11px;
+  }
+
+  .comparison-photo {
+    min-height: 140px;
+  }
+
+  .photo-label {
+    top: 7px;
+    left: 7px;
+    padding: 3px 7px;
+    font-size: 9.5px;
+  }
+
+  .zoom-hint {
+    font-size: 10.5px;
+    padding: 5px 9px;
+  }
+}
+
+/* ==========================================================================
+   15. RESPECT DES PRÉFÉRENCES DE MOUVEMENT
+========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal-ready [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Correction de l'en-tête sur iPhone en mode application installée */
+@supports (padding-top: env(safe-area-inset-top)) {
+  @media (display-mode: standalone) {
+    .site-header {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+  }
+}
+
+/* ---------- Adaptations mobiles complémentaires (PWA, Marquee, Navigation, Conversion & Safe-Area iOS) ---------- */
+
+@media (max-width: 640px) {
+  .pwa-install-banner {
+    padding: 12px 14px;
+  }
+
+  .pwa-install-content {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .pwa-install-mark {
+    width: 40px;
+    height: 38px;
+    font-size: 16px;
+  }
+
+  .pwa-install-copy > strong {
+    font-size: 10.5px;
+    letter-spacing: 0.07em;
+  }
+
+  .pwa-install-copy p {
+    font-size: 12px;
+  }
+
+  .pwa-install-actions {
+    gap: 5px;
+  }
+
+  .pwa-install-button {
+    min-height: 38px;
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+
+  .pwa-install-close {
+    width: 34px;
+    height: 34px;
+  }
+
+  .pwa-ios-steps {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .pwa-install-content {
+    flex-wrap: wrap;
+  }
+
+  .pwa-install-copy {
+    flex-basis: calc(100% - 54px);
+  }
+
+  .pwa-install-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 720px) {
+  .commitments-marquee {
+    margin-bottom: 28px;
+  }
+
+  .commitments-track {
+    animation-duration: 30s;
+  }
+
+  .commitments-marquee .commitment-item {
+    width: min(78vw, 300px);
+    min-height: 108px;
+    padding: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commitments-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .commitments-track {
+    animation: none;
+    transform: none;
+  }
+
+  .commitments-group[aria-hidden='true'] {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   CORRECTION MOBILE — empêcher le texte de dépasser de l'écran
+   Cible l'en-tête de la section « Qui sommes-nous ? » sans modifier le desktop.
+========================================================================== */
+@media (max-width: 720px) {
+  .about-grid,
+  .about-grid > *,
+  .about-grid .section-head,
+  .about-grid .section-head > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .about-grid .section-title,
+  .about-grid .about-lead,
+  .about-grid .about-text,
+  .about-grid .section-subtitle {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .about-grid .section-title {
+    font-size: clamp(27px, 7.2vw, 34px);
+    line-height: 1.16;
+    letter-spacing: -0.035em;
+  }
+
+  .about-grid .section-title em {
+    white-space: normal;
+  }
+
+  .about-grid .about-lead {
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .about-grid .about-text,
+  .about-grid .section-subtitle {
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+}
+
+/* Boutons plus compacts dans la section « Qui sommes-nous ? » sur mobile */
+@media (max-width: 720px) {
+  .about-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .about-actions .btn {
+    width: auto;
+    max-width: 100%;
+    min-height: 46px;
+    flex: 0 1 auto;
+    padding: 11px 16px;
+    font-size: 13.5px;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* Filtres des réalisations — présentation compacte et défilante sur mobile */
+@media (max-width: 720px) {
+  .filter-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-tabs-center {
+    margin-top: 20px;
+  }
+
+  .filter-tab {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 9px 14px;
+    font-size: clamp(12px, 3.35vw, 14px);
+    line-height: 1.2;
+    white-space: nowrap;
+    text-align: center;
+  }
+}
+
+@media (max-width: 1280px) {
+  .header-phone {
+    display: none;
+  }
+}
+
+/* ---------- 15.5 Responsive Pack Conversion ---------- */
+@media (max-width: 1200px) {
+  .reviews-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .faq-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-aside {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .reviews-trust-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .reviews-highlights {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .reviews-google-btn {
+    width: 100%;
+  }
+
+  .reviews-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .reviews-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .review-card {
+    flex: 0 0 min(85vw, 330px);
+    padding: 22px 20px;
+    scroll-snap-align: start;
+  }
+
+  .reviews-swipe-hint {
+    display: block;
+  }
+
+  .faq-trigger {
+    padding: 17px 16px;
+    font-size: 15px;
+    gap: 12px;
+  }
+
+  .faq-panel-inner p {
+    padding: 0 16px 18px;
+    font-size: 14.5px;
+  }
+
+  .faq-support-card {
+    padding: 22px 20px;
+  }
+
+  .photo-preview-list {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-method-pill {
+    padding: 8px 6px;
+    font-size: 12.5px;
+  }
+
+  .privacy-header {
+    padding: 18px 20px;
+  }
+
+  .privacy-body {
+    padding: 20px;
+  }
+
+  .privacy-footer {
+    padding: 12px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-card,
+  .faq-panel,
+  .faq-toggle-icon {
+    transition: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .floating-dock {
+    bottom: max(16px, calc(env(safe-area-inset-bottom) + 10px));
+  }
+
+  .pwa-update-toast {
+    left: 14px;
+    right: 82px;
+    max-width: none;
+    flex-wrap: wrap;
+    padding: 12px 14px;
+  }
+}

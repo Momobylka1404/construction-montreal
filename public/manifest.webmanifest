@@ -2,14 +2,16 @@
   "id": "./",
   "name": "180 SERVICES À DOMICILE",
   "short_name": "180 Services",
-  "description": "Construction, rénovation, jardinage et entretien à domicile à Montréal.",
+  "description": "Construction, rénovation, peinture, pavage, jardins, piscine et aménagement paysager à Montréal.",
   "lang": "fr-CA",
+  "dir": "ltr",
   "display": "standalone",
-  "orientation": "portrait",
-  "theme_color": "#142238",
-  "background_color": "#ffffff",
+  "orientation": "any",
+  "theme_color": "#0b1526",
+  "background_color": "#0b1526",
   "scope": "./",
   "start_url": "./",
+  "categories": ["business", "lifestyle"],
   "icons": [
     {
       "src": "icons/icon-72x72.png",
@@ -58,6 +60,59 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192x192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Soumission gratuite",
+      "short_name": "Soumission",
+      "description": "Demander une soumission gratuite en 1 minute",
+      "url": "./#contact",
+      "icons": [
+        {
+          "src": "icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Réalisations Avant / Après",
+      "short_name": "Réalisations",
+      "description": "Comparer nos transformations avant et après",
+      "url": "./#realisations",
+      "icons": [
+        {
+          "src": "icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Nos 8 services",
+      "short_name": "Services",
+      "description": "Découvrir nos services résidentiels à Montréal",
+      "url": "./#services",
+      "icons": [
+        {
+          "src": "icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,144 @@
+<div
+  class="lightbox-backdrop"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="lightbox-title"
+  (click)="close.emit()"
+>
+  <div class="lightbox-dialog" (click)="$event.stopPropagation()">
+    <div class="lightbox-header">
+      <div>
+        <span class="lightbox-category">
+          {{ project().categoryLabel }} · {{ index() + 1 }} / {{ total() }}
+        </span>
+        <h2 id="lightbox-title">{{ project().title }}</h2>
+      </div>
+
+      <div class="lightbox-controls">
+        <div class="mode-switch" role="group" [attr.aria-label]="i18n.t().a11y.viewModeGroup">
+          <button type="button" [class.is-active]="mode() === 'slider'" (click)="setMode('slider')">
+            {{ i18n.t().lightbox.sliderMode }}
+          </button>
+          <button type="button" [class.is-active]="mode() === 'split'" (click)="setMode('split')">
+            {{ i18n.t().lightbox.splitMode }}
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="lightbox-close"
+          [attr.aria-label]="i18n.t().a11y.closeGallery"
+          (click)="close.emit()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="lightbox-stage">
+      @if (mode() === 'slider') {
+        <div class="compare-slider" [style.--slider-pos]="sliderPosition() + '%'">
+          <img
+            class="compare-img compare-after"
+            [src]="project().afterImage"
+            [alt]="project().afterAlt"
+          />
+          <img
+            class="compare-img compare-before"
+            [src]="project().beforeImage"
+            [alt]="project().beforeAlt"
+          />
+
+          <span class="photo-label avant lightbox-badge-left">{{
+            i18n.t().realisationsSection.beforeBadge
+          }}</span>
+          <span class="photo-label apres lightbox-badge-right">{{
+            i18n.t().realisationsSection.afterBadge
+          }}</span>
+
+          <div class="compare-divider" aria-hidden="true">
+            <span class="compare-handle">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m9 7-5 5 5 5M15 7l5 5-5 5"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <input
+            type="range"
+            min="0"
+            max="100"
+            [value]="sliderPosition()"
+            (input)="onSliderInput($event)"
+            class="compare-range"
+            [attr.aria-label]="i18n.t().a11y.sliderAria + ' — ' + project().title"
+          />
+        </div>
+        <p class="slider-caption">{{ i18n.t().lightbox.sliderCaption }}</p>
+      } @else {
+        <div class="lightbox-split">
+          <figure>
+            <img [src]="project().beforeImage" [alt]="project().beforeAlt" />
+            <figcaption class="photo-label avant">
+              {{ i18n.t().realisationsSection.beforeBadge }}
+            </figcaption>
+          </figure>
+          <figure>
+            <img [src]="project().afterImage" [alt]="project().afterAlt" />
+            <figcaption class="photo-label apres">
+              {{ i18n.t().realisationsSection.afterBadge }}
+            </figcaption>
+          </figure>
+        </div>
+      }
+    </div>
+
+    <div class="lightbox-footer">
+      <p class="lightbox-summary">{{ project().summary }}</p>
+
+      <div class="lightbox-footer-actions">
+        <div class="lightbox-nav">
+          <button
+            type="button"
+            class="btn btn-outline-light btn-sm"
+            (click)="navigate.emit(-1)"
+            [attr.aria-label]="i18n.t().a11y.prevProject"
+          >
+            {{ i18n.t().lightbox.prev }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-light btn-sm"
+            (click)="navigate.emit(1)"
+            [attr.aria-label]="i18n.t().a11y.nextProject"
+          >
+            {{ i18n.t().lightbox.next }}
+          </button>
+        </div>
+
+        <button type="button" class="btn btn-gold btn-sm" (click)="requestQuote.emit(project().id)">
+          {{ i18n.t().lightbox.quoteCta }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -15,6 +15,14 @@ import {
   TimelineKey,
 } from './translations';
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+}
+
 export interface QuoteFormData {
   name: string;
   phone: string;
@@ -60,6 +68,13 @@ export class App {
 
   readonly currentYear = 2026;
   readonly timelineKeys: readonly TimelineKey[] = ['asap', 'month', 'quarter', 'flexible'];
+
+  // --- Installation de l'application (PWA) ---
+  readonly canInstallApp = signal(false);
+  readonly showInstallHelp = signal(false);
+  readonly isIosInstall = signal(false);
+  readonly showIosSteps = signal(false);
+  private deferredInstallPrompt: BeforeInstallPromptEvent | null = null;
 
   // --- Langue active (FR / EN) ---
   readonly lang = signal<Lang>('fr');
@@ -273,6 +288,47 @@ export class App {
   private initBrowserBehaviors(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
+    }
+
+    // --- Détection de l'application déjà installée et préparation de l'installation ---
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+    if (!isStandalone) {
+      const isIos =
+        /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+      this.isIosInstall.set(isIos);
+
+      // Sur iPhone/iPad, Safari ne fournit pas de fenêtre d'installation automatique.
+      // On affiche donc une aide expliquant l'ajout manuel à l'écran d'accueil.
+      if (isIos) {
+        this.showInstallHelp.set(true);
+      }
+
+      const onBeforeInstallPrompt = (event: Event) => {
+        event.preventDefault();
+        this.deferredInstallPrompt = event as BeforeInstallPromptEvent;
+        this.canInstallApp.set(true);
+        this.showInstallHelp.set(true);
+      };
+
+      const onAppInstalled = () => {
+        this.canInstallApp.set(false);
+        this.showInstallHelp.set(false);
+        this.showIosSteps.set(false);
+        this.deferredInstallPrompt = null;
+      };
+
+      window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
+      window.addEventListener('appinstalled', onAppInstalled);
+
+      this.destroyRef.onDestroy(() => {
+        window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
+        window.removeEventListener('appinstalled', onAppInstalled);
+      });
     }
 
     const onScroll = () => {
@@ -726,6 +782,37 @@ export class App {
     this.showFallbackAlert.set(false);
     this.preselectedServiceId.set('');
     this.copiedSummary.set(false);
+  }
+
+  // --- Actions du panneau d'installation ---
+  async installApp(): Promise<void> {
+    const installPrompt = this.deferredInstallPrompt;
+
+    if (!installPrompt) {
+      // Sur iOS, le bouton ouvre les instructions d'installation manuelle.
+      this.showIosSteps.set(true);
+      return;
+    }
+
+    try {
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+
+      if (choice.outcome === 'accepted') {
+        this.showInstallHelp.set(false);
+        this.showIosSteps.set(false);
+      }
+    } catch (error) {
+      console.error('La demande d’installation a échoué :', error);
+    } finally {
+      this.deferredInstallPrompt = null;
+      this.canInstallApp.set(false);
+    }
+  }
+
+  dismissInstallHelp(): void {
+    this.showInstallHelp.set(false);
+    this.showIosSteps.set(false);
   }
 
   scrollToTop(): void {

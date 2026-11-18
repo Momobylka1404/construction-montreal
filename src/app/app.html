@@ -1,5 +1,62 @@
 <a class="skip-link" href="#contenu">{{ t().a11y.skipToContent }}</a>
 
+<!-- PANNEAU D'INSTALLATION DE L'APPLICATION -->
+@if (showInstallHelp()) {
+  <section class="pwa-install-banner" aria-label="Installation de l'application 180 Services">
+    <div class="pwa-install-content">
+      <span class="pwa-install-mark" aria-hidden="true">180</span>
+
+      <div class="pwa-install-copy">
+        <strong>180 SERVICES À DOMICILE</strong>
+        <p>
+          @if (lang() === 'fr') {
+            Installez notre application sur votre téléphone pour y accéder facilement.
+          } @else {
+            Install our app on your phone for quick and easy access.
+          }
+        </p>
+
+        @if (showIosSteps() && isIosInstall()) {
+          <div class="pwa-ios-steps">
+            @if (lang() === 'fr') {
+              <span>1. Appuyez sur <strong>Partager</strong> dans Safari.</span>
+              <span>2. Choisissez <strong>Sur l’écran d’accueil</strong>.</span>
+              <span>3. Appuyez sur <strong>Ajouter</strong>.</span>
+            } @else {
+              <span>1. Tap <strong>Share</strong> in Safari.</span>
+              <span>2. Choose <strong>Add to Home Screen</strong>.</span>
+              <span>3. Tap <strong>Add</strong>.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="pwa-install-actions">
+        @if (canInstallApp()) {
+          <button type="button" class="pwa-install-button" (click)="installApp()">
+            {{ lang() === 'fr' ? 'Installer' : 'Install' }}
+          </button>
+        } @else if (isIosInstall()) {
+          <button
+            type="button"
+            class="pwa-install-button"
+            (click)="showIosSteps.set(!showIosSteps())"
+            [attr.aria-expanded]="showIosSteps()"
+          >
+            {{ showIosSteps() ? (lang() === 'fr' ? 'Masquer' : 'Hide') : (lang() === 'fr' ? 'Comment installer' : 'How to install') }}
+          </button>
+        }
+        <button
+          type="button"
+          class="pwa-install-close"
+          (click)="dismissInstallHelp()"
+          [attr.aria-label]="lang() === 'fr' ? 'Fermer' : 'Close'"
+        >×</button>
+      </div>
+    </div>
+  </section>
+}
+
 <!-- INDICATEUR GLISSÉ POUR ACTUALISER (MOBILE / PWA) -->
 <div
   class="ptr-indicator"

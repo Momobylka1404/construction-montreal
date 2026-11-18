@@ -3024,3 +3024,68 @@ body {
     overflow-x: clip;
   }
 }
+
+
+/* Boutons plus compacts dans la section « Qui sommes-nous ? » sur mobile */
+@media (max-width: 720px) {
+  .about-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .about-actions .btn {
+    width: auto;
+    max-width: 100%;
+    min-height: 46px;
+    flex: 0 1 auto;
+    padding: 11px 16px;
+    font-size: 13.5px;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+
+/* Filtres des réalisations — présentation compacte et défilante sur mobile */
+@media (max-width: 720px) {
+  .filter-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-tabs-center {
+    margin-top: 20px;
+  }
+
+  .filter-tab {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 9px 14px;
+    font-size: clamp(12px, 3.35vw, 14px);
+    line-height: 1.2;
+    white-space: nowrap;
+    text-align: center;
+  }
+}

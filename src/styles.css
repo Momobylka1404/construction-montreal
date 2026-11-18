@@ -2864,3 +2864,103 @@ section[id] {
     justify-content: flex-end;
   }
 }
+
+
+/* Défilement horizontal automatique — expertise complète */
+.commitments-marquee {
+  position: relative;
+  width: 100%;
+  margin: 0 0 34px;
+  overflow: hidden;
+  isolation: isolate;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+
+.commitments-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: commitments-marquee-scroll 34s linear infinite;
+}
+
+.commitments-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+.commitments-marquee .commitment-item {
+  width: clamp(250px, 29vw, 320px);
+  min-height: 112px;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 17px 18px;
+  box-shadow: 0 8px 24px rgba(11, 21, 38, 0.045);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.commitments-marquee .commitment-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 161, 59, 0.55);
+  box-shadow: var(--shadow-md);
+}
+
+.commitments-marquee .commitment-item > div:last-child {
+  min-width: 0;
+}
+
+.commitments-marquee .commitment-item h3 {
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+
+.commitments-marquee .commitment-item p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.commitments-marquee:hover .commitments-track,
+.commitments-marquee:focus-within .commitments-track {
+  animation-play-state: paused;
+}
+
+@keyframes commitments-marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 720px) {
+  .commitments-marquee {
+    margin-bottom: 28px;
+  }
+
+  .commitments-track {
+    animation-duration: 30s;
+  }
+
+  .commitments-marquee .commitment-item {
+    width: min(78vw, 300px);
+    min-height: 108px;
+    padding: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commitments-marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .commitments-track {
+    animation: none;
+    transform: none;
+  }
+
+  .commitments-group[aria-hidden="true"] {
+    display: none;
+  }
+}

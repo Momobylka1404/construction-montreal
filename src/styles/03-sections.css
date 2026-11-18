@@ -1,0 +1,609 @@
+/* ==========================================================================
+   5. SERVICES PROFESSIONNELS
+========================================================================== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-white);
+  box-shadow: var(--shadow-sm);
+  animation: cardFadeIn 320ms var(--ease-out) both;
+  transition:
+    transform 260ms var(--ease-out),
+    box-shadow 260ms var(--ease-out),
+    border-color 260ms ease;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.service-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--surface-cream);
+}
+
+.service-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms var(--ease-out);
+}
+
+.service-index {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(11, 21, 38, 0.84);
+  color: var(--gold-400);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  backdrop-filter: blur(6px);
+}
+
+.service-badge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--navy-950);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.service-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 22px 22px 20px;
+}
+
+.service-body h3 {
+  margin: 0 0 8px;
+  color: var(--navy-950);
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.service-desc {
+  margin: 0 0 16px;
+  color: var(--ink-500);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--border-subtle);
+  list-style: none;
+}
+
+.service-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--ink-700);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.check-icon {
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  flex: 0 0 auto;
+  color: var(--gold-600);
+}
+
+.service-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: auto;
+  padding: 11px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-alabaster);
+  color: var(--navy-950);
+  font-size: 13.5px;
+  font-weight: 700;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease;
+}
+
+.service-cta svg {
+  transition: transform 200ms var(--ease-out);
+}
+
+.service-cta:hover {
+  border-color: var(--navy-950);
+  background: var(--navy-950);
+  color: var(--gold-400);
+}
+
+.service-cta:hover svg {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   6. À PROPOS (MISE EN PAGE ÉDITORIALE ASYMÉTRIQUE)
+========================================================================== */
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(40px, 6vw, 84px);
+}
+
+.about-lead {
+  margin: 22px 0 12px;
+  color: var(--navy-900);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.65;
+}
+
+.about-text {
+  margin: 0 0 28px;
+  color: var(--ink-500);
+  font-size: 15.5px;
+  line-height: 1.75;
+}
+
+.commitments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 34px;
+}
+
+.commitment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-white);
+}
+
+.commitment-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: var(--gold-soft);
+  color: var(--gold-700);
+}
+
+.commitment-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.commitment-item h3 {
+  margin: 0 0 4px;
+  color: var(--navy-950);
+  font-size: 15.5px;
+  font-weight: 800;
+}
+
+.commitment-item p {
+  margin: 0;
+  color: var(--ink-500);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.about-visual {
+  position: relative;
+  padding: 0 18px 28px 0;
+}
+
+.about-frame {
+  position: relative;
+  border-radius: var(--radius-lg);
+}
+
+.about-frame::before {
+  position: absolute;
+  z-index: 0;
+  top: 18px;
+  right: -18px;
+  bottom: -18px;
+  left: 18px;
+  border: 2px solid rgba(212, 161, 59, 0.55);
+  border-radius: var(--radius-lg);
+  content: '';
+}
+
+.about-frame img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.about-floating-card {
+  position: relative;
+  z-index: 2;
+  max-width: 340px;
+  margin: -56px 0 0 24px;
+  padding: 20px 22px;
+  border: 1px solid rgba(212, 161, 59, 0.35);
+  border-radius: var(--radius-md);
+  background: var(--navy-950);
+  color: #ffffff;
+  box-shadow: var(--shadow-lg);
+}
+
+.floating-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--gold-400);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.about-floating-card strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.about-floating-card p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* Défilement horizontal automatique — expertise complète */
+.commitments-marquee {
+  position: relative;
+  width: 100%;
+  margin: 0 0 34px;
+  overflow: hidden;
+  isolation: isolate;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+
+.commitments-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: commitments-marquee-scroll 34s linear infinite;
+}
+
+.commitments-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+.commitments-marquee .commitment-item {
+  width: clamp(250px, 29vw, 320px);
+  min-height: 112px;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 17px 18px;
+  box-shadow: 0 8px 24px rgba(11, 21, 38, 0.045);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.commitments-marquee .commitment-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 161, 59, 0.55);
+  box-shadow: var(--shadow-md);
+}
+
+.commitments-marquee .commitment-item > div:last-child {
+  min-width: 0;
+}
+
+.commitments-marquee .commitment-item h3 {
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+
+.commitments-marquee .commitment-item p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.commitments-marquee:hover .commitments-track,
+.commitments-marquee:focus-within .commitments-track {
+  animation-play-state: paused;
+}
+
+@keyframes commitments-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ==========================================================================
+   7. MÉTHODE EN 4 ÉTAPES (BANDEAU BLEU MARINE)
+========================================================================== */
+.process-section {
+  position: relative;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(212, 161, 59, 0.12), transparent 42%), var(--navy-950);
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process-card {
+  position: relative;
+  padding: 28px 24px;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.process-card:hover {
+  border-color: rgba(212, 161, 59, 0.45);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.process-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 20px;
+  border: 1.5px solid rgba(212, 161, 59, 0.55);
+  border-radius: 50%;
+  background: rgba(212, 161, 59, 0.12);
+  color: var(--gold-400);
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.process-card h3 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.process-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   8. RÉALISATIONS AVANT / APRÈS
+========================================================================== */
+.realisations-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.realisation-card {
+  min-width: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-white);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  animation: cardFadeIn 320ms var(--ease-out) both;
+  transition:
+    transform 260ms var(--ease-out),
+    box-shadow 260ms var(--ease-out),
+    border-color 220ms ease;
+}
+
+.realisation-trigger {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.comparison-images {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+  width: 100%;
+  background: var(--surface-white);
+}
+
+.comparison-photo {
+  position: relative;
+  aspect-ratio: 4 / 4.4;
+  min-height: 165px;
+  overflow: hidden;
+  background: var(--surface-cream);
+}
+
+.comparison-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 480ms var(--ease-out);
+}
+
+.photo-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.photo-label.avant {
+  background: rgba(11, 21, 38, 0.88);
+  color: #ffffff;
+}
+
+.photo-label.apres {
+  background: var(--gold-500);
+  color: var(--navy-950);
+}
+
+.zoom-hint {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: var(--radius-pill);
+  background: rgba(11, 21, 38, 0.84);
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  opacity: 0.92;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 200ms ease;
+}
+
+.zoom-hint svg {
+  width: 13px;
+  height: 13px;
+}
+
+.realisation-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 18px;
+}
+
+.realisation-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: var(--surface-alabaster);
+  border: 1px solid var(--border-subtle);
+  color: var(--navy-900);
+}
+
+.realisation-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.realisation-meta {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.realisation-meta h3 {
+  margin: 0 0 3px;
+  color: var(--navy-950);
+  font-size: 15.5px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.realisation-meta p {
+  margin: 0;
+  color: var(--ink-500);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.realisation-arrow {
+  display: inline-flex;
+  color: var(--gold-700);
+  flex: 0 0 auto;
+  transition: transform 200ms var(--ease-out);
+}
+
+.realisation-arrow svg {
+  width: 17px;
+  height: 17px;
+}

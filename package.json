@@ -1,12 +1,21 @@
 {
   "name": "construction-montreal",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "180 Services à domicile — Site web bilingue (FR/EN), SSR pré-rendu et PWA (Montréal)",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:pages": "node scripts/build-pages.mjs",
     "watch": "ng build --watch --configuration development",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
     "test": "ng test",
+    "test:ci": "ng test --watch=false",
+    "verify:seo": "node scripts/verify-seo.mjs",
+    "check": "npm run typecheck && npm run test:ci",
+    "set-domain": "node scripts/set-domain.mjs",
+    "format": "prettier --write \"src/**/*.{ts,html,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,css}\"",
     "serve:ssr:construction-montreal": "node dist/construction-montreal/server/server.mjs"
   },
   "private": true,

@@ -1,0 +1,72 @@
+<div
+  class="privacy-backdrop"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="privacy-modal-title"
+  (click)="close.emit()"
+>
+  <div class="privacy-dialog" (click)="$event.stopPropagation()">
+    <div class="privacy-header">
+      <div class="privacy-header-copy">
+        <span class="privacy-eyebrow">{{ i18n.t().privacyModal.eyebrow }}</span>
+        <h2 id="privacy-modal-title">{{ i18n.t().privacyModal.title }}</h2>
+        <span class="privacy-updated">{{ i18n.t().privacyModal.updatedAt }}</span>
+      </div>
+
+      <button
+        type="button"
+        class="lightbox-close"
+        [attr.aria-label]="i18n.t().a11y.closePrivacy"
+        (click)="close.emit()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="privacy-body">
+      <p class="privacy-intro">{{ i18n.t().privacyModal.intro }}</p>
+
+      @for (section of i18n.t().privacyModal.sections; track section.title) {
+        <section class="privacy-section">
+          <h3>{{ section.title }}</h3>
+          <p>{{ section.body }}</p>
+          @if (section.items?.length) {
+            <ul>
+              @for (bullet of section.items; track $index) {
+                <li>{{ bullet }}</li>
+              }
+            </ul>
+          }
+        </section>
+      }
+
+      <div class="privacy-officer-box">
+        <h3>{{ i18n.t().privacyModal.officerBoxTitle }}</h3>
+        <p class="privacy-officer-role">{{ i18n.t().privacyModal.officerRole }}</p>
+        <div class="privacy-officer-links">
+          <a [href]="'mailto:' + config.email">{{ config.email }}</a>
+          <a [href]="config.phoneHref">{{ config.phoneDisplay }}</a>
+          <span
+            >{{ i18n.t().contactSection.addressStreet }},
+            {{ i18n.t().contactSection.addressCity }}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="privacy-footer">
+      <button type="button" class="btn btn-navy btn-sm" (click)="close.emit()">
+        {{ i18n.t().privacyModal.closeCta }}
+      </button>
+    </div>
+  </div>
+</div>

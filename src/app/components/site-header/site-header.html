@@ -1,0 +1,320 @@
+<!-- PANNEAU D'INSTALLATION DE L'APPLICATION (PWA) -->
+@if (pwa.showInstallHelp()) {
+  <section class="pwa-install-banner" [attr.aria-label]="i18n.t().pwa.installAria">
+    <div class="pwa-install-content">
+      <span class="pwa-install-mark" aria-hidden="true">180</span>
+
+      <div class="pwa-install-copy">
+        <strong>{{ config.companyName }}</strong>
+        <p>{{ i18n.t().pwa.installLead }}</p>
+
+        @if (pwa.showIosSteps() && pwa.isIosInstall()) {
+          <div class="pwa-ios-steps">
+            @for (step of i18n.t().pwa.iosSteps; track $index) {
+              <span
+                >{{ step.prefix }}<strong>{{ step.strong }}</strong
+                >{{ step.suffix }}</span
+              >
+            }
+          </div>
+        }
+      </div>
+
+      <div class="pwa-install-actions">
+        @if (pwa.canInstallApp()) {
+          <button type="button" class="pwa-install-button" (click)="pwa.installApp()">
+            {{ i18n.t().pwa.installAction }}
+          </button>
+        } @else if (pwa.isIosInstall()) {
+          <button
+            type="button"
+            class="pwa-install-button"
+            (click)="pwa.toggleIosSteps()"
+            [attr.aria-expanded]="pwa.showIosSteps()"
+          >
+            {{ pwa.showIosSteps() ? i18n.t().pwa.hideSteps : i18n.t().pwa.howToInstall }}
+          </button>
+        }
+        <button
+          type="button"
+          class="pwa-install-close"
+          (click)="pwa.dismissInstallHelp()"
+          [attr.aria-label]="i18n.t().pwa.dismissInstallAria"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  </section>
+}
+
+<!-- BARRE D'INFORMATION SUPÉRIEURE (DESKTOP) -->
+<div class="top-bar" [attr.aria-label]="i18n.t().a11y.quickContact">
+  <div class="container top-bar-inner">
+    <div class="top-bar-left">
+      <span class="top-bar-item">
+        <svg
+          class="icon-xs"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 21s-7-5.686-7-11a7 7 0 1 1 14 0c0 5.314-7 11-7 11Z"
+          />
+          <circle cx="12" cy="10" r="2.5" />
+        </svg>
+        {{ i18n.t().topBar.address }}
+      </span>
+      <span class="top-bar-sep" aria-hidden="true"></span>
+      <span class="top-bar-item">{{ i18n.t().topBar.tagline }}</span>
+    </div>
+
+    <div class="top-bar-right">
+      <a class="top-bar-link" [href]="config.phoneHref">
+        <svg
+          class="icon-xs"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"
+          />
+        </svg>
+        {{ config.phoneDisplay }}
+      </a>
+      <a class="top-bar-link" [href]="'mailto:' + config.email">
+        {{ config.email }}
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- EN-TÊTE PRINCIPAL & NAVIGATION RESPONSIVE -->
+<header class="site-header" [class.is-scrolled]="isScrolled()">
+  <div class="container header-inner">
+    <a
+      class="brand"
+      [href]="i18n.sectionHref('accueil')"
+      (click)="onSectionClick($event, 'accueil')"
+      [attr.aria-label]="i18n.t().a11y.brandHome"
+    >
+      <span class="brand-mark" aria-hidden="true">180</span>
+      <span class="brand-text">
+        <span class="brand-name">{{ i18n.t().brand.name }}</span>
+        <span class="brand-city">{{ i18n.t().brand.city }}</span>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" [attr.aria-label]="i18n.t().a11y.mainNav">
+      @for (item of i18n.t().nav; track item.id) {
+        <a
+          [href]="i18n.sectionHref(item.id)"
+          (click)="onSectionClick($event, item.id)"
+          [class.is-active]="activeSection() === item.id"
+          [attr.aria-current]="activeSection() === item.id ? 'page' : null"
+        >
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang-switch" role="group" [attr.aria-label]="i18n.t().a11y.langSwitch">
+        <a
+          class="lang-btn"
+          [href]="i18n.langHref('fr')"
+          hreflang="fr-CA"
+          lang="fr-CA"
+          [class.is-active]="i18n.lang() === 'fr'"
+          [attr.aria-current]="i18n.lang() === 'fr' ? 'true' : null"
+          (click)="i18n.onSwitchLanguage($event, 'fr')"
+        >
+          FR
+        </a>
+        <a
+          class="lang-btn"
+          [href]="i18n.langHref('en')"
+          hreflang="en-CA"
+          lang="en-CA"
+          [class.is-active]="i18n.lang() === 'en'"
+          [attr.aria-current]="i18n.lang() === 'en' ? 'true' : null"
+          (click)="i18n.onSwitchLanguage($event, 'en')"
+        >
+          EN
+        </a>
+      </div>
+
+      <a class="header-phone" [href]="config.phoneHref" [attr.aria-label]="i18n.t().a11y.callPhone">
+        <svg
+          class="icon-sm"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"
+          />
+        </svg>
+        <span>{{ config.phoneDisplay }}</span>
+      </a>
+
+      <a
+        class="btn btn-gold btn-sm header-cta"
+        [href]="i18n.sectionHref('contact')"
+        (click)="onSectionClick($event, 'contact')"
+      >
+        {{ i18n.t().header.cta }}
+      </a>
+
+      <button
+        type="button"
+        class="menu-toggle"
+        [class.is-open]="mobileMenuOpen()"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        aria-controls="mobile-drawer"
+        [attr.aria-label]="i18n.t().a11y.toggleMenu"
+        (click)="toggleMenu.emit()"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- TIROIR DE NAVIGATION MOBILE -->
+@if (mobileMenuOpen()) {
+  <div class="mobile-backdrop" (click)="closeMenu.emit()" aria-hidden="true"></div>
+}
+<aside
+  id="mobile-drawer"
+  class="mobile-drawer"
+  [class.is-open]="mobileMenuOpen()"
+  [attr.aria-hidden]="!mobileMenuOpen()"
+  [attr.aria-label]="i18n.t().a11y.mobileNav"
+>
+  <div class="mobile-drawer-head">
+    <span class="brand brand-light">
+      <span class="brand-mark" aria-hidden="true">180</span>
+      <span class="brand-text">
+        <span class="brand-name">{{ i18n.t().brand.name }}</span>
+        <span class="brand-city">{{ i18n.t().brand.city }}</span>
+      </span>
+    </span>
+    <button
+      type="button"
+      class="drawer-close"
+      [attr.aria-label]="i18n.t().a11y.closeMenu"
+      (click)="closeMenu.emit()"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-drawer-lang">
+    <div
+      class="lang-switch lang-switch-dark"
+      role="group"
+      [attr.aria-label]="i18n.t().a11y.langSwitch"
+    >
+      <a
+        class="lang-btn"
+        [href]="i18n.langHref('fr')"
+        hreflang="fr-CA"
+        lang="fr-CA"
+        [class.is-active]="i18n.lang() === 'fr'"
+        [attr.aria-current]="i18n.lang() === 'fr' ? 'true' : null"
+        (click)="i18n.onSwitchLanguage($event, 'fr')"
+      >
+        Français (FR)
+      </a>
+      <a
+        class="lang-btn"
+        [href]="i18n.langHref('en')"
+        hreflang="en-CA"
+        lang="en-CA"
+        [class.is-active]="i18n.lang() === 'en'"
+        [attr.aria-current]="i18n.lang() === 'en' ? 'true' : null"
+        (click)="i18n.onSwitchLanguage($event, 'en')"
+      >
+        English (EN)
+      </a>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" [attr.aria-label]="i18n.t().a11y.mobileNav">
+    @for (item of i18n.t().nav; track item.id) {
+      <a
+        [href]="i18n.sectionHref(item.id)"
+        [class.is-active]="activeSection() === item.id"
+        (click)="onSectionClick($event, item.id)"
+      >
+        <span>{{ item.label }}</span>
+        <svg
+          class="icon-xs"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    }
+  </nav>
+
+  <div class="mobile-drawer-footer">
+    <a
+      class="btn btn-gold btn-block"
+      [href]="i18n.sectionHref('contact')"
+      (click)="onSectionClick($event, 'contact')"
+    >
+      {{ i18n.t().header.mobileCta }}
+    </a>
+    <a
+      class="btn btn-whatsapp btn-block"
+      [href]="i18n.whatsappDirectUrl()"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {{ i18n.t().header.mobileWhatsapp }}
+    </a>
+    <div class="mobile-drawer-meta">
+      <a [href]="config.phoneHref">{{ config.phoneDisplay }}</a>
+      <a [href]="'mailto:' + config.email">{{ config.email }}</a>
+      <span
+        >{{ i18n.t().contactSection.addressStreet }},
+        {{ i18n.t().contactSection.addressCity }}</span
+      >
+    </div>
+  </div>
+</aside>

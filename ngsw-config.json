@@ -3,25 +3,41 @@
   "index": "/index.html",
   "assetGroups": [
     {
-      "name": "app",
+      "name": "app-shell",
       "installMode": "prefetch",
+      "updateMode": "prefetch",
       "resources": {
         "files": [
           "/favicon.ico",
           "/index.csr.html",
           "/index.html",
+          "/en/index.html",
           "/manifest.webmanifest",
+          "/images/hero-montreal.webp",
+          "/icons/apple-touch-icon.png",
+          "/icons/icon-192x192.png",
           "/*.css",
           "/*.js"
         ]
       }
     },
     {
-      "name": "assets",
+      "name": "media-assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
-        "files": ["/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"]
+        "files": [
+          "/images/**/*.(webp|jpg|jpeg|png|avif|svg)",
+          "/icons/**/*.(png|svg)"
+        ]
+      }
+    },
+    {
+      "name": "fonts-and-misc",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": ["/**/*.(cur|apng|gif|otf|ttf|woff|woff2)"]
       }
     }
   ]

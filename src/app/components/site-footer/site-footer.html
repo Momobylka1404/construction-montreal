@@ -1,0 +1,90 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <a
+          class="brand brand-light"
+          [href]="i18n.sectionHref('accueil')"
+          (click)="onSectionClick($event, 'accueil')"
+        >
+          <span class="brand-mark" aria-hidden="true">180</span>
+          <span class="brand-text">
+            <span class="brand-name">{{ i18n.t().brand.name }}</span>
+            <span class="brand-city">{{ i18n.t().brand.city }}</span>
+          </span>
+        </a>
+        <p class="footer-tagline">{{ i18n.t().footer.tagline }}</p>
+      </div>
+
+      <div class="footer-col">
+        <h3>{{ i18n.t().footer.navHeading }}</h3>
+        <ul>
+          @for (item of i18n.t().nav; track item.id) {
+            <li>
+              <a [href]="i18n.sectionHref(item.id)" (click)="onSectionClick($event, item.id)">
+                {{ item.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>{{ i18n.t().footer.servicesHeading }}</h3>
+        <ul class="footer-services-list">
+          @for (service of i18n.t().services; track service.id) {
+            <li>
+              <button type="button" class="footer-link-btn" (click)="requestQuote.emit(service.id)">
+                {{ service.title }}
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>{{ i18n.t().footer.contactHeading }}</h3>
+        <ul class="footer-contact-list">
+          <li>
+            <a [href]="config.phoneHref">{{ config.phoneDisplay }}</a>
+          </li>
+          <li>
+            <a [href]="'mailto:' + config.email">{{ config.email }}</a>
+          </li>
+          <li>
+            <a [href]="config.mapsUrl" target="_blank" rel="noopener noreferrer">
+              {{ i18n.t().contactSection.addressStreet }}<br />
+              {{ i18n.t().contactSection.addressCity }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer-areas">
+      <strong>{{ i18n.t().footer.areasLabel }}</strong>
+      {{ i18n.t().footer.areasList }}
+    </p>
+
+    <div class="footer-bottom">
+      <p>© {{ config.currentYear }} {{ config.companyName }}. {{ i18n.t().footer.rights }}</p>
+      <div class="footer-bottom-links">
+        <a
+          class="footer-lang-link"
+          [href]="i18n.langHref(alternateLang())"
+          [attr.hreflang]="alternateHrefLang()"
+          [attr.lang]="alternateHrefLang()"
+          (click)="i18n.onSwitchLanguage($event, alternateLang())"
+        >
+          {{ i18n.t().footer.altLangLabel }}
+        </a>
+        <span class="footer-bottom-sep" aria-hidden="true">·</span>
+        <button type="button" class="footer-privacy-btn" (click)="openPrivacy.emit()">
+          {{ i18n.t().footer.privacyLink }}
+        </button>
+        <span class="footer-bottom-sep" aria-hidden="true">·</span>
+        <span>{{ i18n.t().footer.location }}</span>
+      </div>
+    </div>
+  </div>
+</footer>

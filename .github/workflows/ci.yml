@@ -1,0 +1,98 @@
+name: CI — Qualité, SSR, SEO & Lighthouse
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Typecheck, Tests, Build SSR & Audit SEO
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Strict TypeScript check
+        run: npm run typecheck
+
+      - name: Unit tests (Vitest)
+        run: npm run test:ci
+
+      - name: Production SSR prerender + PWA build
+        run: npm run build:pages
+
+      - name: Verify bilingual SEO, Schema.org, Sitemap & PWA
+        run: npm run verify:seo
+
+      - name: Upload built browser bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-bundle
+          path: dist/construction-montreal/browser
+          retention-days: 7
+
+  lighthouse:
+    name: Audit Lighthouse (FR & EN)
+    runs-on: ubuntu-latest
+    needs: quality
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Download built browser bundle
+        uses: actions/download-artifact@v8
+        with:
+          name: browser-bundle
+          path: dist/construction-montreal/browser
+
+      - name: Prepare static directory matching production base-href
+        id: lhci_prep
+        run: |
+          rm -rf .lhci-site
+          if [ -s public/CNAME ]; then
+            cp -R dist/construction-montreal/browser .lhci-site
+            {
+              echo "urls<<EOF"
+              echo "/index.html"
+              echo "/en/index.html"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            mkdir -p .lhci-site
+            cp -R dist/construction-montreal/browser .lhci-site/construction-montreal
+            {
+              echo "urls<<EOF"
+              echo "/construction-montreal/index.html"
+              echo "/construction-montreal/en/index.html"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run Lighthouse CI on FR & EN routes
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          urls: ${{ steps.lhci_prep.outputs.urls }}
+          uploadArtifacts: true
+          artifactName: lighthouse-reports

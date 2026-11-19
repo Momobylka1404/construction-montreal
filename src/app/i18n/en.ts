@@ -72,43 +72,36 @@ export const EN_CONTENT: SiteContent = {
   nav: [
     {
       id: 'accueil',
-      number: '01',
       label: 'Home',
       subtitle: 'Introduction and main message',
     },
     {
       id: 'expertises',
-      number: '02',
       label: 'Our Expertise',
       subtitle: 'All services offered',
     },
     {
       id: 'realisations',
-      number: '03',
       label: 'Our Projects',
       subtitle: 'Project gallery and photos',
     },
     {
       id: 'pourquoi-nous',
-      number: '04',
       label: 'Why Choose Us',
       subtitle: 'Our commitments and craftsmanship',
     },
     {
       id: 'avis',
-      number: '05',
       label: 'Client Reviews',
       subtitle: 'Testimonials',
     },
     {
       id: 'faq',
-      number: '06',
       label: 'FAQ',
       subtitle: 'Frequently asked questions',
     },
     {
       id: 'contact',
-      number: '07',
       label: 'Contact',
       subtitle: 'Quote request and contact details',
     },
@@ -148,7 +141,7 @@ export const EN_CONTENT: SiteContent = {
     ],
   },
   servicesSection: {
-    eyebrow: '02 · OUR EXPERTISE',
+    eyebrow: 'OUR EXPERTISE',
     titleMain: 'Eight mastered trades to',
     titleAccent: 'elevate your property',
     subtitle:
@@ -297,7 +290,7 @@ export const EN_CONTENT: SiteContent = {
     },
   ],
   about: {
-    eyebrow: '04 · WHY CHOOSE US',
+    eyebrow: 'WHY CHOOSE US',
     titleMain: 'Our commitments and',
     titleAccent: 'our craftsmanship.',
     lead: '180 SERVICES À DOMICILE supports homeowners across Montreal with residential construction, renovation, and full exterior care.',
@@ -363,7 +356,7 @@ export const EN_CONTENT: SiteContent = {
     ],
   },
   realisationsSection: {
-    eyebrow: '03 · OUR PROJECTS',
+    eyebrow: 'OUR PROJECTS',
     titleMain: 'Before & After',
     titleAccent: 'Project Gallery',
     subtitle:
@@ -491,7 +484,7 @@ export const EN_CONTENT: SiteContent = {
   ],
   // Tip: you can easily replace these sample reviews with your verified client testimonials.
   testimonialsSection: {
-    eyebrow: '05 · CLIENT REVIEWS',
+    eyebrow: 'CLIENT REVIEWS',
     titleMain: 'Trusted by',
     titleAccent: 'Montreal homeowners.',
     subtitle:
@@ -582,7 +575,7 @@ export const EN_CONTENT: SiteContent = {
     ],
   },
   faqSection: {
-    eyebrow: '06 · FAQ — FREQUENTLY ASKED QUESTIONS',
+    eyebrow: 'FAQ — FREQUENTLY ASKED QUESTIONS',
     titleMain: 'Everything to know before',
     titleAccent: 'starting your project.',
     subtitle:
@@ -648,7 +641,7 @@ export const EN_CONTENT: SiteContent = {
     quoteCta: 'Request a quote for this service',
   },
   contactSection: {
-    eyebrow: '07 · CONTACT & QUOTE',
+    eyebrow: 'CONTACT & QUOTE',
     titleMain: 'Let’s talk about your',
     titleAccent: 'next project.',
     lead: 'Get a free, no-obligation estimate. Tell us about your project and we will get back to you promptly.',

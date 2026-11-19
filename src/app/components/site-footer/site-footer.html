@@ -18,12 +18,11 @@
 
       <div class="footer-col">
         <h3>{{ i18n.t().footer.navHeading }}</h3>
-        <ul class="footer-nav-list">
+        <ul>
           @for (item of i18n.t().nav; track item.id) {
             <li>
               <a [href]="i18n.sectionHref(item.id)" (click)="onSectionClick($event, item.id)">
-                <span class="footer-nav-num" aria-hidden="true">{{ item.number }}</span>
-                <span>{{ item.label }}</span>
+                {{ item.label }}
               </a>
             </li>
           }

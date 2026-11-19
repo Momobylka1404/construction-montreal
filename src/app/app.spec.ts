@@ -36,7 +36,7 @@ describe('App — 180 Services à domicile (architecture modulaire)', () => {
     expect(compiled.querySelector('footer.site-footer .footer-areas')).toBeTruthy();
   });
 
-  it('orders all 7 numbered sections (01–07) and synchronizes header, mobile drawer, and footer links', async () => {
+  it('orders all 7 unnumbered sections and synchronizes header, mobile drawer, and footer links', async () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     await fixture.whenStable();
@@ -66,10 +66,15 @@ describe('App — 180 Services à domicile (architecture modulaire)', () => {
       'Contact',
     ]);
 
-    const mobileNumbers = Array.from(compiled.querySelectorAll('.mobile-nav .mobile-nav-num')).map(
-      (el) => el.textContent?.trim(),
+    expect(compiled.querySelectorAll('.mobile-nav-num').length).toBe(0);
+    expect(compiled.querySelectorAll('.footer-nav-num').length).toBe(0);
+
+    const eyebrows = Array.from(compiled.querySelectorAll('main .eyebrow')).map((el) =>
+      el.textContent?.trim(),
     );
-    expect(mobileNumbers).toEqual(['01', '02', '03', '04', '05', '06', '07']);
+    for (const eyebrow of eyebrows) {
+      expect(eyebrow).not.toMatch(/^0[1-7]\b/);
+    }
 
     const mobileSubtitles = Array.from(
       compiled.querySelectorAll('.mobile-nav .mobile-nav-sub'),

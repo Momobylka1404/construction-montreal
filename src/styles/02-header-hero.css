@@ -383,33 +383,13 @@
 .mobile-nav a {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 13px;
   padding: 12px 4px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.92);
   text-decoration: none;
   transition: color 180ms ease;
-}
-
-.mobile-nav-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 30px;
-  height: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--gold-400);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-  transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease;
 }
 
 .mobile-nav-copy {
@@ -443,16 +423,6 @@
 .mobile-nav a.is-active,
 .mobile-nav a:hover {
   color: var(--gold-400);
-}
-
-.mobile-nav a.is-active .mobile-nav-num {
-  border-color: var(--gold-500);
-  background: var(--gold-500);
-  color: var(--navy-950);
-}
-
-.mobile-nav a:hover .mobile-nav-num {
-  border-color: rgba(231, 191, 102, 0.5);
 }
 
 .mobile-nav a.is-active .mobile-nav-arrow,

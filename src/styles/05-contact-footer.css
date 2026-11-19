@@ -708,20 +708,6 @@
   list-style: none;
 }
 
-.footer-nav-list a {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 9px;
-}
-
-.footer-nav-num {
-  color: rgba(231, 191, 102, 0.72);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  font-variant-numeric: tabular-nums;
-}
-
 .footer-services-list {
   display: grid !important;
   grid-template-columns: repeat(2, minmax(0, 1fr));

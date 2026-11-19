@@ -512,6 +512,10 @@ section[id] {
   background: var(--surface-alabaster);
 }
 
+.section-alabaster .filter-tabs {
+  background: var(--surface-white);
+}
+
 .filter-tabs-center {
   margin-top: 28px;
 }

@@ -13,6 +13,13 @@ export type ServiceIconKey =
   | 'dechets'
   | 'paysagement';
 
+export interface NavItem {
+  id: string;
+  number: string;
+  label: string;
+  subtitle: string;
+}
+
 export interface ServiceItem {
   id: string;
   number: string;
@@ -138,7 +145,7 @@ export interface SiteContent {
     name: string;
     city: string;
   };
-  nav: readonly { id: string; label: string }[];
+  nav: readonly NavItem[];
   header: {
     cta: string;
     mobileCta: string;

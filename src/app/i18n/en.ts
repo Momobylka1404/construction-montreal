@@ -24,7 +24,7 @@ export const EN_CONTENT: SiteContent = {
     callPhone: 'Call 514 823-3467',
     toggleMenu: 'Open or close navigation menu',
     closeMenu: 'Close menu',
-    scrollToServices: 'Scroll to our services',
+    scrollToServices: 'Scroll to our expertise',
     filterServices: 'Filter services by category',
     filterRealisations: 'Filter projects by category',
     compareLarge: 'Compare full screen',
@@ -70,13 +70,48 @@ export const EN_CONTENT: SiteContent = {
     city: 'MONTREAL',
   },
   nav: [
-    { id: 'accueil', label: 'Home' },
-    { id: 'services', label: 'Services' },
-    { id: 'apropos', label: 'About' },
-    { id: 'realisations', label: 'Projects' },
-    { id: 'avis', label: 'Reviews' },
-    { id: 'faq', label: 'FAQ' },
-    { id: 'contact', label: 'Contact' },
+    {
+      id: 'accueil',
+      number: '01',
+      label: 'Home',
+      subtitle: 'Introduction and main message',
+    },
+    {
+      id: 'expertises',
+      number: '02',
+      label: 'Our Expertise',
+      subtitle: 'All services offered',
+    },
+    {
+      id: 'realisations',
+      number: '03',
+      label: 'Our Projects',
+      subtitle: 'Project gallery and photos',
+    },
+    {
+      id: 'pourquoi-nous',
+      number: '04',
+      label: 'Why Choose Us',
+      subtitle: 'Our commitments and craftsmanship',
+    },
+    {
+      id: 'avis',
+      number: '05',
+      label: 'Client Reviews',
+      subtitle: 'Testimonials',
+    },
+    {
+      id: 'faq',
+      number: '06',
+      label: 'FAQ',
+      subtitle: 'Frequently asked questions',
+    },
+    {
+      id: 'contact',
+      number: '07',
+      label: 'Contact',
+      subtitle: 'Quote request and contact details',
+    },
   ],
   header: {
     cta: 'Free Estimate',
@@ -84,12 +119,12 @@ export const EN_CONTENT: SiteContent = {
     mobileWhatsapp: 'Chat on WhatsApp',
   },
   hero: {
-    eyebrow: 'YOUR RESIDENTIAL PARTNER IN MONTREAL',
+    eyebrow: '180 HOME SERVICES · MONTREAL',
     titleMain: 'One single partner.',
     titleAccent: 'All your projects.',
     lead: 'From construction and interior renovations to paving and landscaping, we support Montreal homeowners with craftsmanship, clarity, and reliable execution.',
     primaryCta: 'Request a Free Quote',
-    secondaryCta: 'Explore Our 8 Services',
+    secondaryCta: 'Explore Our Expertise',
     quickLabel: 'Need a quick answer?',
     whatsappDirect: 'Direct WhatsApp',
     scrollCue: 'Explore',
@@ -113,11 +148,11 @@ export const EN_CONTENT: SiteContent = {
     ],
   },
   servicesSection: {
-    eyebrow: 'COMPLETE EXPERTISE',
+    eyebrow: '02 · OUR EXPERTISE',
     titleMain: 'Eight mastered trades to',
     titleAccent: 'elevate your property',
     subtitle:
-      'Comprehensive, well-coordinated interior and exterior solutions tailored to Montreal homes.',
+      'All interior and exterior services offered, thoughtfully coordinated for Montreal homes.',
     filterAll: 'All',
     filterBuilding: 'Building & Interior',
     filterExterior: 'Exterior & Care',
@@ -262,12 +297,12 @@ export const EN_CONTENT: SiteContent = {
     },
   ],
   about: {
-    eyebrow: 'ABOUT US',
-    titleMain: 'Your satisfaction,',
-    titleAccent: 'our top priority.',
+    eyebrow: '04 · WHY CHOOSE US',
+    titleMain: 'Our commitments and',
+    titleAccent: 'our craftsmanship.',
     lead: '180 SERVICES À DOMICILE supports homeowners across Montreal with residential construction, renovation, and full exterior care.',
     text: 'Our goal is straightforward: save you the hassle of juggling multiple contractors by providing one versatile, dependable partner focused on every finish — from structural builds to seasonal property maintenance.',
-    primaryCta: 'Discuss Your Project',
+    primaryCta: 'Request a Free Quote',
     secondaryCta: 'View Our Projects',
     imageAlt: 'Bright contemporary residential living room interior',
     floatingLabel: 'SERVICE HUB',
@@ -328,11 +363,11 @@ export const EN_CONTENT: SiteContent = {
     ],
   },
   realisationsSection: {
-    eyebrow: 'OUR WORK',
+    eyebrow: '03 · OUR PROJECTS',
     titleMain: 'Before & After',
-    titleAccent: 'Transformations',
+    titleAccent: 'Project Gallery',
     subtitle:
-      'Click any project below to open the interactive full-screen before-and-after comparison.',
+      'Browse photos of our completed work and click any project to open the interactive full-screen comparison.',
     filterAll: 'All',
     filterBuilding: 'Building & Interior',
     filterExterior: 'Exterior & Yard',
@@ -456,7 +491,7 @@ export const EN_CONTENT: SiteContent = {
   ],
   // Tip: you can easily replace these sample reviews with your verified client testimonials.
   testimonialsSection: {
-    eyebrow: 'CLIENT REVIEWS',
+    eyebrow: '05 · CLIENT REVIEWS',
     titleMain: 'Trusted by',
     titleAccent: 'Montreal homeowners.',
     subtitle:
@@ -547,7 +582,7 @@ export const EN_CONTENT: SiteContent = {
     ],
   },
   faqSection: {
-    eyebrow: 'FREQUENTLY ASKED QUESTIONS',
+    eyebrow: '06 · FAQ — FREQUENTLY ASKED QUESTIONS',
     titleMain: 'Everything to know before',
     titleAccent: 'starting your project.',
     subtitle:
@@ -613,7 +648,7 @@ export const EN_CONTENT: SiteContent = {
     quoteCta: 'Request a quote for this service',
   },
   contactSection: {
-    eyebrow: 'CONTACT US',
+    eyebrow: '07 · CONTACT & QUOTE',
     titleMain: 'Let’s talk about your',
     titleAccent: 'next project.',
     lead: 'Get a free, no-obligation estimate. Tell us about your project and we will get back to you promptly.',

@@ -89,9 +89,9 @@
       ]
     },
     {
-      "name": "Réalisations Avant / Après",
+      "name": "Nos réalisations",
       "short_name": "Réalisations",
-      "description": "Comparer nos transformations avant et après",
+      "description": "Galerie de projets et photos avant / après",
       "url": "./#realisations",
       "icons": [
         {
@@ -102,10 +102,10 @@
       ]
     },
     {
-      "name": "Nos 8 services",
-      "short_name": "Services",
-      "description": "Découvrir nos services résidentiels à Montréal",
-      "url": "./#services",
+      "name": "Nos expertises",
+      "short_name": "Expertises",
+      "description": "Tous les services proposés à Montréal",
+      "url": "./#expertises",
       "icons": [
         {
           "src": "icons/icon-96x96.png",

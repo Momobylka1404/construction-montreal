@@ -200,6 +200,10 @@
   background: var(--surface-white);
 }
 
+.section-white .commitment-item {
+  background: var(--surface-alabaster);
+}
+
 .commitment-icon {
   display: inline-flex;
   align-items: center;

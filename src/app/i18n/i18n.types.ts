@@ -15,7 +15,6 @@ export type ServiceIconKey =
 
 export interface NavItem {
   id: string;
-  number: string;
   label: string;
   subtitle: string;
 }

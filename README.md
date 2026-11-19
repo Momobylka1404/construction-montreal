@@ -31,13 +31,13 @@ src/
 │   │   └── quote.util.ts         # Formatage téléphone, validation, résumé WhatsApp/courriel & payload API
 │   └── components/               # Composants autonomes OnPush par section et modale (@defer)
 │       ├── site-header/          # Bannière PWA, barre supérieure, header sticky & tiroir mobile
-│       ├── hero-section/         # 01. Accueil — Présentation et message principal (image LCP préchargée)
-│       ├── services-section/     # 02. Nos expertises — Tous les services proposés (8 services filtrables)
-│       ├── realisations-section/ # 03. Nos réalisations — Galerie de projets et photos Avant / Après
-│       ├── about-process-section/# 04. Pourquoi nous choisir — Nos engagements, savoir-faire & méthode en 4 étapes
-│       ├── reviews-section/      # 05. Avis clients — Témoignages Grand Montréal & lien Google
-│       ├── faq-section/          # 06. FAQ — Questions fréquentes (accordéon accessible)
-│       ├── contact-section/      # 07. Contact — Demande de devis (photos, budget, Loi 25) & coordonnées
+│       ├── hero-section/         # Accueil — Présentation et message principal (image LCP préchargée)
+│       ├── services-section/     # Nos expertises — Tous les services proposés (8 services filtrables)
+│       ├── realisations-section/ # Nos réalisations — Galerie de projets et photos Avant / Après
+│       ├── about-process-section/# Pourquoi nous choisir — Nos engagements, savoir-faire & méthode en 4 étapes
+│       ├── reviews-section/      # Avis clients — Témoignages Grand Montréal & lien Google
+│       ├── faq-section/          # FAQ — Questions fréquentes (accordéon accessible)
+│       ├── contact-section/      # Contact — Demande de devis (photos, budget, Loi 25) & coordonnées
 │       ├── site-footer/          # Pied de page, secteurs desservis & bascule de langue
 │       ├── lightbox-modal/       # Comparateur Avant / Après (curseur + côte à côte, chargé en @defer)
 │       ├── privacy-modal/        # Politique de confidentialité Loi 25 (chargée en @defer)

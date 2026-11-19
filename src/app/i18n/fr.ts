@@ -72,43 +72,36 @@ export const FR_CONTENT: SiteContent = {
   nav: [
     {
       id: 'accueil',
-      number: '01',
       label: 'Accueil',
       subtitle: 'Présentation et message principal',
     },
     {
       id: 'expertises',
-      number: '02',
       label: 'Nos expertises',
       subtitle: 'Tous les services proposés',
     },
     {
       id: 'realisations',
-      number: '03',
       label: 'Nos réalisations',
       subtitle: 'Galerie de projets et photos',
     },
     {
       id: 'pourquoi-nous',
-      number: '04',
       label: 'Pourquoi nous choisir',
       subtitle: 'Nos engagements et notre savoir-faire',
     },
     {
       id: 'avis',
-      number: '05',
       label: 'Avis clients',
       subtitle: 'Témoignages',
     },
     {
       id: 'faq',
-      number: '06',
       label: 'FAQ',
       subtitle: 'Questions fréquentes',
     },
     {
       id: 'contact',
-      number: '07',
       label: 'Contact',
       subtitle: 'Demande de devis et coordonnées',
     },
@@ -148,7 +141,7 @@ export const FR_CONTENT: SiteContent = {
     ],
   },
   servicesSection: {
-    eyebrow: '02 · NOS EXPERTISES',
+    eyebrow: 'NOS EXPERTISES',
     titleMain: 'Huit métiers maîtrisés pour',
     titleAccent: 'sublimer votre propriété',
     subtitle:
@@ -297,7 +290,7 @@ export const FR_CONTENT: SiteContent = {
     },
   ],
   about: {
-    eyebrow: '04 · POURQUOI NOUS CHOISIR',
+    eyebrow: 'POURQUOI NOUS CHOISIR',
     titleMain: 'Nos engagements et',
     titleAccent: 'notre savoir-faire.',
     lead: '180 SERVICES À DOMICILE accompagne les propriétaires résidentiels dans leurs projets de construction, de rénovation et d’entretien extérieur à Montréal.',
@@ -362,7 +355,7 @@ export const FR_CONTENT: SiteContent = {
     ],
   },
   realisationsSection: {
-    eyebrow: '03 · NOS RÉALISATIONS',
+    eyebrow: 'NOS RÉALISATIONS',
     titleMain: 'Galerie de projets',
     titleAccent: 'Avant / Après',
     subtitle:
@@ -490,7 +483,7 @@ export const FR_CONTENT: SiteContent = {
   ],
   // Astuce : remplacez facilement ces témoignages d'exemple par vos vrais avis clients.
   testimonialsSection: {
-    eyebrow: '05 · AVIS CLIENTS',
+    eyebrow: 'AVIS CLIENTS',
     titleMain: 'La confiance des',
     titleAccent: 'propriétaires montréalais.',
     subtitle:
@@ -581,7 +574,7 @@ export const FR_CONTENT: SiteContent = {
     ],
   },
   faqSection: {
-    eyebrow: '06 · FAQ — QUESTIONS FRÉQUENTES',
+    eyebrow: 'FAQ — QUESTIONS FRÉQUENTES',
     titleMain: 'Tout savoir avant de',
     titleAccent: 'lancer vos travaux.',
     subtitle:
@@ -647,7 +640,7 @@ export const FR_CONTENT: SiteContent = {
     quoteCta: 'Demander un devis pour ce service',
   },
   contactSection: {
-    eyebrow: '07 · CONTACT & DEVIS',
+    eyebrow: 'CONTACT & DEVIS',
     titleMain: 'Parlons de votre',
     titleAccent: 'prochain projet.',
     lead: 'Obtenez une soumission gratuite et sans engagement. Expliquez-nous votre besoin et nous vous répondrons rapidement.',

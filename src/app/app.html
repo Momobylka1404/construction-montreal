@@ -15,25 +15,25 @@
 />
 
 <main id="contenu" tabindex="-1">
-  <!-- 01. Accueil — Présentation et message principal -->
+  <!-- Accueil — Présentation et message principal -->
   <app-hero-section (navigateSection)="onNavigateSection($event)" />
 
-  <!-- 02. Nos expertises — Tous les services proposés -->
+  <!-- Nos expertises — Tous les services proposés -->
   <app-services-section (requestQuote)="requestQuoteForService($event)" />
 
-  <!-- 03. Nos réalisations — Galerie de projets et photos -->
+  <!-- Nos réalisations — Galerie de projets et photos -->
   <app-realisations-section [(filter)]="realisationFilter" (openProject)="openLightbox($event)" />
 
-  <!-- 04. Pourquoi nous choisir — Nos engagements et notre savoir-faire -->
+  <!-- Pourquoi nous choisir — Nos engagements et notre savoir-faire -->
   <app-about-process-section (navigateSection)="onNavigateSection($event)" />
 
-  <!-- 05. Avis clients — Témoignages -->
+  <!-- Avis clients — Témoignages -->
   <app-reviews-section (requestQuote)="requestQuoteForService($event)" />
 
-  <!-- 06. FAQ — Questions fréquentes -->
+  <!-- FAQ — Questions fréquentes -->
   <app-faq-section />
 
-  <!-- 07. Contact — Demande de devis et coordonnées -->
+  <!-- Contact — Demande de devis et coordonnées -->
   <app-contact-section [selectedService]="selectedService()" (openPrivacy)="openPrivacyModal()" />
 </main>
 

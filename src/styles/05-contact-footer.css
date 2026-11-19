@@ -676,8 +676,8 @@
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.35fr 0.7fr 1.15fr 1fr;
-  gap: 36px 40px;
+  grid-template-columns: 1.25fr 0.85fr 1.1fr 1fr;
+  gap: 36px 36px;
   padding-bottom: 44px;
   border-bottom: 1px solid var(--border-dark);
 }
@@ -706,6 +706,20 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.footer-nav-list a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.footer-nav-num {
+  color: rgba(231, 191, 102, 0.72);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
 }
 
 .footer-services-list {

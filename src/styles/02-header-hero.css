@@ -69,7 +69,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 18px;
   min-height: 78px;
 }
 
@@ -136,15 +136,16 @@
 .desktop-nav {
   display: flex;
   align-items: center;
-  gap: clamp(18px, 2.2vw, 32px);
+  gap: clamp(13px, 1.45vw, 24px);
 }
 
 .desktop-nav a {
   position: relative;
   padding-block: 8px;
   color: var(--ink-700);
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 600;
+  white-space: nowrap;
   text-decoration: none;
   transition: color 180ms ease;
 }
@@ -376,24 +377,88 @@
 .mobile-nav {
   display: flex;
   flex-direction: column;
-  margin-block: 24px;
+  margin-block: 20px;
 }
 
 .mobile-nav a {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 15px 4px;
+  gap: 13px;
+  padding: 12px 4px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 17px;
-  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
   text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.mobile-nav-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--gold-400);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.mobile-nav-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mobile-nav-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.mobile-nav-sub {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.mobile-nav-arrow {
+  color: rgba(255, 255, 255, 0.45);
+  transition:
+    transform 180ms var(--ease-out),
+    color 180ms ease;
 }
 
 .mobile-nav a.is-active,
 .mobile-nav a:hover {
   color: var(--gold-400);
+}
+
+.mobile-nav a.is-active .mobile-nav-num {
+  border-color: var(--gold-500);
+  background: var(--gold-500);
+  color: var(--navy-950);
+}
+
+.mobile-nav a:hover .mobile-nav-num {
+  border-color: rgba(231, 191, 102, 0.5);
+}
+
+.mobile-nav a.is-active .mobile-nav-arrow,
+.mobile-nav a:hover .mobile-nav-arrow {
+  color: var(--gold-400);
+  transform: translateX(2px);
 }
 
 .mobile-drawer-footer {

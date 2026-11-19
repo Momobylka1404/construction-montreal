@@ -122,7 +122,8 @@ export class I18nService {
     if (syncRoute && this.router) {
       const targetRoute = nextLang === 'en' ? '/en' : '/';
       if (detectRouteLang(this.router.url) !== nextLang) {
-        void this.router.navigateByUrl(targetRoute, { replaceUrl });
+        const hash = window.location.hash || '';
+        void this.router.navigateByUrl(`${targetRoute}${hash}`, { replaceUrl });
       }
     }
   }

@@ -123,7 +123,8 @@
           [href]="i18n.sectionHref(item.id)"
           (click)="onSectionClick($event, item.id)"
           [class.is-active]="activeSection() === item.id"
-          [attr.aria-current]="activeSection() === item.id ? 'page' : null"
+          [attr.aria-current]="activeSection() === item.id ? 'location' : null"
+          [attr.title]="item.number + ' — ' + item.subtitle"
         >
           {{ item.label }}
         </a>
@@ -274,11 +275,16 @@
       <a
         [href]="i18n.sectionHref(item.id)"
         [class.is-active]="activeSection() === item.id"
+        [attr.aria-current]="activeSection() === item.id ? 'location' : null"
         (click)="onSectionClick($event, item.id)"
       >
-        <span>{{ item.label }}</span>
+        <span class="mobile-nav-num" aria-hidden="true">{{ item.number }}</span>
+        <span class="mobile-nav-copy">
+          <span class="mobile-nav-title">{{ item.label }}</span>
+          <span class="mobile-nav-sub">{{ item.subtitle }}</span>
+        </span>
         <svg
-          class="icon-xs"
+          class="icon-xs mobile-nav-arrow"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

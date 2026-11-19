@@ -36,6 +36,59 @@ describe('App — 180 Services à domicile (architecture modulaire)', () => {
     expect(compiled.querySelector('footer.site-footer .footer-areas')).toBeTruthy();
   });
 
+  it('orders all 7 numbered sections (01–07) and synchronizes header, mobile drawer, and footer links', async () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    const sectionIds = Array.from(compiled.querySelectorAll('main section[id]')).map((el) => el.id);
+    expect(sectionIds).toEqual([
+      'accueil',
+      'expertises',
+      'realisations',
+      'pourquoi-nous',
+      'avis',
+      'faq',
+      'contact',
+    ]);
+
+    const desktopLabels = Array.from(compiled.querySelectorAll('.desktop-nav a')).map((a) =>
+      a.textContent?.trim(),
+    );
+    expect(desktopLabels).toEqual([
+      'Accueil',
+      'Nos expertises',
+      'Nos réalisations',
+      'Pourquoi nous choisir',
+      'Avis clients',
+      'FAQ',
+      'Contact',
+    ]);
+
+    const mobileNumbers = Array.from(compiled.querySelectorAll('.mobile-nav .mobile-nav-num')).map(
+      (el) => el.textContent?.trim(),
+    );
+    expect(mobileNumbers).toEqual(['01', '02', '03', '04', '05', '06', '07']);
+
+    const mobileSubtitles = Array.from(
+      compiled.querySelectorAll('.mobile-nav .mobile-nav-sub'),
+    ).map((el) => el.textContent?.trim());
+    expect(mobileSubtitles).toEqual([
+      'Présentation et message principal',
+      'Tous les services proposés',
+      'Galerie de projets et photos',
+      'Nos engagements et notre savoir-faire',
+      'Témoignages',
+      'Questions fréquentes',
+      'Demande de devis et coordonnées',
+    ]);
+
+    // Compatibilité des anciennes ancres
+    expect(app.resolveSectionId('services')).toBe('expertises');
+    expect(app.resolveSectionId('apropos')).toBe('pourquoi-nous');
+  });
+
   it('switches cleanly between FR and EN across all child sections', async () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;

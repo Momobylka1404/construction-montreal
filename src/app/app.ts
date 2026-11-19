@@ -108,15 +108,21 @@ export class App {
     if (!isPlainLeftClick(event) || !this.isBrowser) {
       return;
     }
-    const target = this.doc.getElementById(sectionId);
+    const resolvedId = this.resolveSectionId(sectionId);
+    const target = this.doc.getElementById(resolvedId);
     if (!target) {
       return;
     }
     event.preventDefault();
     this.closeMobileMenu(false);
+
+    if (this.i18n.t().nav.some((item) => item.id === resolvedId)) {
+      this.activeSection.set(resolvedId);
+    }
+
     target.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
 
-    if (sectionId === 'contenu') {
+    if (resolvedId === 'contenu') {
       target.focus({ preventScroll: true });
     }
 
@@ -124,11 +130,22 @@ export class App {
       window.history.replaceState(
         window.history.state,
         '',
-        `${window.location.pathname}#${sectionId}`,
+        `${window.location.pathname}#${resolvedId}`,
       );
     } catch {
       // Ignore history API restrictions
     }
+  }
+
+  /** Compatibilité des anciennes ancres (#services, #apropos) avec les 7 rubriques. */
+  resolveSectionId(sectionId: string): string {
+    if (sectionId === 'services') {
+      return 'expertises';
+    }
+    if (sectionId === 'apropos') {
+      return 'pourquoi-nous';
+    }
+    return sectionId;
   }
 
   scrollToTop(): void {
@@ -305,16 +322,12 @@ export class App {
     // Positionnement initial si l'URL contient une ancre (ex. /en/#contact ou raccourci PWA)
     const initialHash = window.location.hash.replace(/^#/, '');
     if (initialHash) {
-      this.doc
-        .getElementById(decodeURIComponent(initialHash))
-        ?.scrollIntoView?.({ behavior: 'auto', block: 'start' });
+      const resolvedHash = this.resolveSectionId(decodeURIComponent(initialHash));
+      this.doc.getElementById(resolvedHash)?.scrollIntoView?.({ behavior: 'auto', block: 'start' });
     }
 
-    // Suivi de la section active dans la barre de navigation
-    const sections = this.i18n
-      .t()
-      .nav.map((item) => this.doc.getElementById(item.id))
-      .filter((el): el is HTMLElement => el !== null);
+    // Suivi de la section active (01 à 07) dans la barre de navigation
+    const sections = Array.from(this.doc.querySelectorAll<HTMLElement>('[data-nav-section]'));
 
     let sectionObserver: IntersectionObserver | null = null;
     if ('IntersectionObserver' in window && sections.length > 0) {
@@ -323,8 +336,9 @@ export class App {
           const visible = entries
             .filter((entry) => entry.isIntersecting)
             .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-          if (visible[0]?.target.id) {
-            this.activeSection.set(visible[0].target.id);
+          const navId = (visible[0]?.target as HTMLElement | undefined)?.dataset['navSection'];
+          if (navId) {
+            this.activeSection.set(navId);
           }
         },
         {

@@ -1,4 +1,4 @@
-<section class="hero" id="accueil" aria-labelledby="hero-title">
+<section class="hero" id="accueil" data-nav-section="accueil" aria-labelledby="hero-title">
   <div class="hero-media" aria-hidden="true">
     <img
       class="hero-media-img"
@@ -47,8 +47,8 @@
         </a>
 
         <a
-          [href]="i18n.sectionHref('services')"
-          (click)="onSectionClick($event, 'services')"
+          [href]="i18n.sectionHref('expertises')"
+          (click)="onSectionClick($event, 'expertises')"
           class="btn btn-ghost-light btn-lg"
         >
           {{ i18n.t().hero.secondaryCta }}
@@ -76,8 +76,8 @@
   </div>
 
   <a
-    [href]="i18n.sectionHref('services')"
-    (click)="onSectionClick($event, 'services')"
+    [href]="i18n.sectionHref('expertises')"
+    (click)="onSectionClick($event, 'expertises')"
     class="scroll-cue"
     [attr.aria-label]="i18n.t().a11y.scrollToServices"
   >

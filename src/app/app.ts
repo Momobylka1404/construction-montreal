@@ -9,39 +9,23 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { AboutProcessSectionComponent } from './components/about-process-section/about-process-section';
-import { ContactSectionComponent } from './components/contact-section/contact-section';
-import { FaqSectionComponent } from './components/faq-section/faq-section';
-import { HeroSectionComponent } from './components/hero-section/hero-section';
-import { LightboxModalComponent } from './components/lightbox-modal/lightbox-modal';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { PrivacyModalComponent } from './components/privacy-modal/privacy-modal';
 import { PwaOverlaysComponent } from './components/pwa-overlays/pwa-overlays';
-import { RealisationsSectionComponent } from './components/realisations-section/realisations-section';
-import { ReviewsSectionComponent } from './components/reviews-section/reviews-section';
-import { ServicesSectionComponent } from './components/services-section/services-section';
 import { SiteFooterComponent } from './components/site-footer/site-footer';
 import { SiteHeaderComponent } from './components/site-header/site-header';
+import { getPageHref, getPageIdFromPath, getPagePath } from './config/pages.config';
 import { FocusController, isPlainLeftClick } from './core/focus.util';
 import { I18nService } from './core/i18n.service';
 import { PwaService } from './core/pwa.service';
-import { ServiceCategory } from './i18n';
-import { ServiceSelectionEvent } from './models/quote.models';
+import { QuotePrefillService } from './core/quote-prefill.service';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     SiteHeaderComponent,
-    HeroSectionComponent,
-    ServicesSectionComponent,
-    AboutProcessSectionComponent,
-    RealisationsSectionComponent,
-    ReviewsSectionComponent,
-    FaqSectionComponent,
-    ContactSectionComponent,
     SiteFooterComponent,
-    LightboxModalComponent,
     PrivacyModalComponent,
     PwaOverlaysComponent,
   ],
@@ -57,130 +41,87 @@ export class App {
   private readonly destroyRef = inject(DestroyRef);
   private readonly doc = inject(DOCUMENT);
   private readonly pwa = inject(PwaService);
+  private readonly router = inject(Router);
   private readonly focus = new FocusController(this.doc, this.isBrowser);
 
   readonly i18n = inject(I18nService);
+  private readonly quotePrefill = inject(QuotePrefillService);
 
-  // --- État d'interface global (navigation, modales & galerie) ---
   readonly mobileMenuOpen = signal(false);
   readonly privacyModalOpen = signal(false);
   readonly isScrolled = signal(false);
   readonly showBackToTop = signal(false);
-  readonly activeSection = signal('accueil');
 
-  readonly realisationFilter = signal<ServiceCategory>('all');
-  readonly activeRealisationId = signal<string | null>(null);
-  readonly selectedService = signal<ServiceSelectionEvent | null>(null);
-
-  /** Liste parcourue dans la lightbox : respecte le filtre actif (Bâtiment / Extérieur / Tous). */
-  readonly lightboxRealisations = computed(() => {
-    const all = this.i18n.t().realisations;
-    const filter = this.realisationFilter();
-    const filtered = filter === 'all' ? all : all.filter((item) => item.category === filter);
-    const id = this.activeRealisationId();
-    return id && filtered.some((item) => item.id === id) ? filtered : all;
-  });
-
-  readonly activeRealisation = computed(() => {
-    const id = this.activeRealisationId();
-    return id ? (this.i18n.t().realisations.find((item) => item.id === id) ?? null) : null;
-  });
-
-  readonly activeRealisationIndex = computed(() => {
-    const id = this.activeRealisationId();
-    return id ? this.lightboxRealisations().findIndex((item) => item.id === id) : -1;
-  });
+  readonly activeSection = computed(() => this.i18n.activePageId());
 
   constructor() {
     afterNextRender(() => {
       this.i18n.restoreSavedLanguage();
       this.pwa.initBrowser(this.destroyRef, () => this.isAnyOverlayOpen());
       this.initScrollAndReveal();
+      this.handleLegacyHash();
+      this.listenForPrivacyEvent();
     });
   }
 
-  // --- Navigation fluide par ancres (compatible `<base href>` sur `/` et `/en/`) ---
-  onNavigateSection(payload: { event: MouseEvent; sectionId: string }): void {
-    this.scrollToSection(payload.event, payload.sectionId);
+  pageHref(pageId: string): string {
+    return this.i18n.pageHref(pageId);
   }
 
-  scrollToSection(event: MouseEvent, sectionId: string): void {
-    if (!isPlainLeftClick(event) || !this.isBrowser) {
-      return;
-    }
-    const resolvedId = this.resolveSectionId(sectionId);
-    const target = this.doc.getElementById(resolvedId);
-    if (!target) {
-      return;
-    }
+  onNavigateFromHeader(payload: { event: MouseEvent; sectionId: string }): void {
+    this.navigateToPage(payload.event, payload.sectionId);
+  }
+
+  onNavigateFromFooter(payload: { event: MouseEvent; sectionId: string }): void {
+    this.navigateToPage(payload.event, payload.sectionId);
+  }
+
+  onNavigatePage(event: MouseEvent, pageId: string): void {
+    this.navigateToPage(event, pageId);
+  }
+
+  private navigateToPage(event: MouseEvent, pageId: string): void {
+    if (!isPlainLeftClick(event) || !this.isBrowser) return;
+    const resolved = this.resolveSectionId(pageId);
+    const target = getPagePath(resolved, this.i18n.lang());
+    const url = target === '' ? '/' : `/${target}`;
     event.preventDefault();
     this.closeMobileMenu(false);
-
-    if (this.i18n.t().nav.some((item) => item.id === resolvedId)) {
-      this.activeSection.set(resolvedId);
-    }
-
-    target.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
-
-    if (resolvedId === 'contenu') {
-      target.focus({ preventScroll: true });
-    }
-
-    try {
-      window.history.replaceState(
-        window.history.state,
-        '',
-        `${window.location.pathname}#${resolvedId}`,
-      );
-    } catch {
-      // Ignore history API restrictions
-    }
+    void this.router.navigateByUrl(url);
   }
 
-  /** Compatibilité des anciennes ancres (#services, #apropos) avec les 7 rubriques. */
+  /** Compatibilité anciennes ancres (#services, #apropos) */
   resolveSectionId(sectionId: string): string {
-    if (sectionId === 'services') {
-      return 'expertises';
-    }
-    if (sectionId === 'apropos') {
-      return 'pourquoi-nous';
-    }
+    if (sectionId === 'services') return 'expertises';
+    if (sectionId === 'apropos') return 'pourquoi-nous';
     return sectionId;
   }
 
-  scrollToTop(): void {
-    if (this.isBrowser) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  onRequestQuote(serviceId: string): void {
+    this.closeMobileMenu(false);
+    this.quotePrefill.requestQuote(serviceId);
   }
 
-  // --- Tiroir mobile ---
+  scrollToTop(): void {
+    if (this.isBrowser) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   toggleMobileMenu(): void {
     const next = !this.mobileMenuOpen();
-    if (next) {
-      this.focus.captureOrigin();
-    }
+    if (next) this.focus.captureOrigin();
     this.mobileMenuOpen.set(next);
     this.syncScrollLock();
-    if (next) {
-      this.focus.focusFirstInside('.mobile-drawer');
-    } else {
-      this.focus.restore();
-    }
+    if (next) this.focus.focusFirstInside('.mobile-drawer');
+    else this.focus.restore();
   }
 
   closeMobileMenu(restoreFocus = true): void {
-    if (!this.mobileMenuOpen()) {
-      return;
-    }
+    if (!this.mobileMenuOpen()) return;
     this.mobileMenuOpen.set(false);
     this.syncScrollLock();
-    if (restoreFocus && !this.privacyModalOpen() && this.activeRealisationId() === null) {
-      this.focus.restore();
-    }
+    if (restoreFocus && !this.privacyModalOpen()) this.focus.restore();
   }
 
-  // --- Modale Politique de confidentialité (Loi 25, Québec) ---
   openPrivacyModal(): void {
     this.focus.captureOrigin();
     this.closeMobileMenu(false);
@@ -189,116 +130,27 @@ export class App {
   }
 
   closePrivacyModal(restoreFocus = true): void {
-    if (!this.privacyModalOpen()) {
-      return;
-    }
+    if (!this.privacyModalOpen()) return;
     this.privacyModalOpen.set(false);
     this.syncScrollLock();
-    if (restoreFocus) {
-      this.focus.restore();
-    }
+    if (restoreFocus) this.focus.restore();
   }
 
-  // --- Lightbox Avant / Après ---
-  openLightbox(realisationId: string): void {
-    this.focus.captureOrigin();
-    this.closeMobileMenu(false);
-    this.privacyModalOpen.set(false);
-    this.activeRealisationId.set(realisationId);
-    this.syncScrollLock();
-  }
-
-  closeLightbox(restoreFocus = true): void {
-    if (this.activeRealisationId() === null) {
-      return;
-    }
-    this.activeRealisationId.set(null);
-    this.syncScrollLock();
-    if (restoreFocus) {
-      this.focus.restore();
-    }
-  }
-
-  navigateLightbox(delta: number): void {
-    const items = this.lightboxRealisations();
-    const currentIndex = this.activeRealisationIndex();
-    if (currentIndex === -1 || items.length === 0) {
-      return;
-    }
-    const nextIndex = (currentIndex + delta + items.length) % items.length;
-    this.activeRealisationId.set(items[nextIndex].id);
-  }
-
-  // --- Pré-sélection d'un service et défilement vers le formulaire ---
-  requestQuoteForService(serviceId: string): void {
-    this.focus.clearOrigin();
-    this.closeLightbox(false);
-    this.closePrivacyModal(false);
-    this.closeMobileMenu(false);
-
-    this.selectedService.update((prev) => ({
-      serviceId,
-      seq: (prev?.seq ?? 0) + 1,
-    }));
-
-    if (this.isBrowser) {
-      this.doc.getElementById('contact')?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
-  // --- Navigation clavier globale (piège de focus, Échap, flèches galerie) ---
   onDocumentKeydown(event: KeyboardEvent): void {
     if (event.key === 'Tab') {
-      if (this.privacyModalOpen()) {
-        this.focus.trapTab(event, '.privacy-dialog');
-      } else if (this.activeRealisationId() !== null) {
-        this.focus.trapTab(event, '.lightbox-dialog');
-      } else if (this.mobileMenuOpen()) {
-        this.focus.trapTab(event, '.mobile-drawer');
-      }
+      if (this.privacyModalOpen()) this.focus.trapTab(event, '.privacy-dialog');
+      else if (this.mobileMenuOpen()) this.focus.trapTab(event, '.mobile-drawer');
       return;
     }
-
     if (event.key === 'Escape') {
-      if (this.privacyModalOpen()) {
-        this.closePrivacyModal();
-      } else if (this.activeRealisationId() !== null) {
-        this.closeLightbox();
-      } else if (this.mobileMenuOpen()) {
-        this.closeMobileMenu();
-      }
+      if (this.privacyModalOpen()) this.closePrivacyModal();
+      else if (this.mobileMenuOpen()) this.closeMobileMenu();
       return;
-    }
-
-    if (this.activeRealisationId() === null) {
-      return;
-    }
-
-    const target = event.target as HTMLElement | null;
-    if (target instanceof HTMLInputElement && target.type === 'range') {
-      return;
-    }
-
-    if (event.key === 'ArrowRight') {
-      this.navigateLightbox(1);
-    } else if (event.key === 'ArrowLeft') {
-      this.navigateLightbox(-1);
-    } else if (event.key === 'Home') {
-      const first = this.lightboxRealisations()[0];
-      if (first) {
-        this.activeRealisationId.set(first.id);
-      }
-    } else if (event.key === 'End') {
-      const items = this.lightboxRealisations();
-      const last = items[items.length - 1];
-      if (last) {
-        this.activeRealisationId.set(last.id);
-      }
     }
   }
 
   private isAnyOverlayOpen(): boolean {
-    return this.mobileMenuOpen() || this.privacyModalOpen() || this.activeRealisationId() !== null;
+    return this.mobileMenuOpen() || this.privacyModalOpen();
   }
 
   private syncScrollLock(): void {
@@ -306,53 +158,17 @@ export class App {
   }
 
   private initScrollAndReveal(): void {
-    if (!this.isBrowser) {
-      return;
-    }
+    if (!this.isBrowser) return;
 
     const onScroll = () => {
       const y = window.scrollY;
       this.isScrolled.set(y > 28);
       this.showBackToTop.set(y > 520);
     };
-
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Positionnement initial si l'URL contient une ancre (ex. /en/#contact ou raccourci PWA)
-    const initialHash = window.location.hash.replace(/^#/, '');
-    if (initialHash) {
-      const resolvedHash = this.resolveSectionId(decodeURIComponent(initialHash));
-      this.doc.getElementById(resolvedHash)?.scrollIntoView?.({ behavior: 'auto', block: 'start' });
-    }
-
-    // Suivi de la section active (01 à 07) dans la barre de navigation
-    const sections = Array.from(this.doc.querySelectorAll<HTMLElement>('[data-nav-section]'));
-
-    let sectionObserver: IntersectionObserver | null = null;
-    if ('IntersectionObserver' in window && sections.length > 0) {
-      sectionObserver = new IntersectionObserver(
-        (entries) => {
-          const visible = entries
-            .filter((entry) => entry.isIntersecting)
-            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-          const navId = (visible[0]?.target as HTMLElement | undefined)?.dataset['navSection'];
-          if (navId) {
-            this.activeSection.set(navId);
-          }
-        },
-        {
-          rootMargin: '-25% 0px -55% 0px',
-          threshold: [0.1, 0.25, 0.5],
-        },
-      );
-
-      for (const section of sections) {
-        sectionObserver.observe(section);
-      }
-    }
-
-    // Animations d'apparition au défilement (respectueuses de prefers-reduced-motion)
+    // Animations d'apparition au défilement
     const prefersReducedMotion =
       typeof window.matchMedia === 'function' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -371,26 +187,70 @@ export class App {
             }
           }
         },
-        {
-          rootMargin: '0px 0px -20px 0px',
-          threshold: 0.01,
-        },
+        { rootMargin: '0px 0px -20px 0px', threshold: 0.01 },
       );
-
       for (const el of revealEls) {
-        if (el.getBoundingClientRect().top < window.innerHeight) {
-          el.classList.add('is-visible');
-        } else {
-          revealObserver.observe(el);
-        }
+        if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visible');
+        else revealObserver.observe(el);
       }
+
+      // Observer les nouveaux éléments ajoutés par navigation de pages
+      const routerSub = this.router.events.subscribe((ev) => {
+        if (ev instanceof NavigationEnd) {
+          setTimeout(() => {
+            const newEls = Array.from(
+              this.doc.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-visible)'),
+            );
+            for (const el of newEls) {
+              if (el.getBoundingClientRect().top < window.innerHeight)
+                el.classList.add('is-visible');
+              else revealObserver?.observe(el);
+            }
+          }, 50);
+        }
+      });
+      this.destroyRef.onDestroy(() => routerSub.unsubscribe());
     }
 
     this.destroyRef.onDestroy(() => {
       window.removeEventListener('scroll', onScroll);
-      sectionObserver?.disconnect();
       revealObserver?.disconnect();
       this.focus.setBodyScrollLocked(false);
     });
   }
+
+  private handleLegacyHash(): void {
+    if (!this.isBrowser) return;
+    const hash = window.location.hash.replace(/^#/, '');
+    if (!hash) return;
+    const resolved = this.resolveSectionId(decodeURIComponent(hash));
+    const pageId = getPageIdFromPath(resolved) ?? this.resolveSectionId(resolved);
+    // Si le hash correspond à une page connue, rediriger vers la page dédiée
+    if (PAGE_IDS.includes(pageId) || getPageIdFromPath(hash)) {
+      const target = getPagePath(pageId, this.i18n.lang());
+      const url = target === '' ? '/' : `/${target}`;
+      // Nettoyer le hash sans recharger
+      try {
+        history.replaceState(history.state, '', window.location.pathname);
+      } catch {}
+      void this.router.navigateByUrl(url);
+    }
+  }
+
+  private listenForPrivacyEvent(): void {
+    if (!this.isBrowser) return;
+    const handler = () => this.openPrivacyModal();
+    document.addEventListener('openPrivacy', handler);
+    this.destroyRef.onDestroy(() => document.removeEventListener('openPrivacy', handler));
+  }
 }
+
+const PAGE_IDS = [
+  'accueil',
+  'expertises',
+  'realisations',
+  'pourquoi-nous',
+  'avis',
+  'faq',
+  'contact',
+];

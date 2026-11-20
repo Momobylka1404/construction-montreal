@@ -4,7 +4,7 @@
       <div class="footer-brand-col">
         <a
           class="brand brand-light"
-          [href]="i18n.sectionHref('accueil')"
+          [href]="i18n.pageHref('accueil')"
           (click)="onSectionClick($event, 'accueil')"
         >
           <span class="brand-mark" aria-hidden="true">180</span>
@@ -21,7 +21,7 @@
         <ul>
           @for (item of i18n.t().nav; track item.id) {
             <li>
-              <a [href]="i18n.sectionHref(item.id)" (click)="onSectionClick($event, item.id)">
+              <a [href]="i18n.pageHref(item.id)" (click)="onSectionClick($event, item.id)">
                 {{ item.label }}
               </a>
             </li>

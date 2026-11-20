@@ -79,7 +79,7 @@
       "name": "Soumission gratuite",
       "short_name": "Soumission",
       "description": "Demander une soumission gratuite en 1 minute",
-      "url": "./#contact",
+      "url": "./contact",
       "icons": [
         {
           "src": "icons/icon-96x96.png",
@@ -92,7 +92,7 @@
       "name": "Nos réalisations",
       "short_name": "Réalisations",
       "description": "Galerie de projets et photos avant / après",
-      "url": "./#realisations",
+      "url": "./realisations",
       "icons": [
         {
           "src": "icons/icon-96x96.png",
@@ -105,7 +105,7 @@
       "name": "Nos expertises",
       "short_name": "Expertises",
       "description": "Tous les services proposés à Montréal",
-      "url": "./#expertises",
+      "url": "./expertises",
       "icons": [
         {
           "src": "icons/icon-96x96.png",

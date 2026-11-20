@@ -28,7 +28,7 @@
 
       <div class="hero-actions">
         <a
-          [href]="i18n.sectionHref('contact')"
+          [href]="i18n.pageHref('contact')"
           (click)="onSectionClick($event, 'contact')"
           class="btn btn-gold btn-lg"
         >
@@ -47,7 +47,7 @@
         </a>
 
         <a
-          [href]="i18n.sectionHref('expertises')"
+          [href]="i18n.pageHref('expertises')"
           (click)="onSectionClick($event, 'expertises')"
           class="btn btn-ghost-light btn-lg"
         >
@@ -76,7 +76,7 @@
   </div>
 
   <a
-    [href]="i18n.sectionHref('expertises')"
+    [href]="i18n.pageHref('expertises')"
     (click)="onSectionClick($event, 'expertises')"
     class="scroll-cue"
     [attr.aria-label]="i18n.t().a11y.scrollToServices"

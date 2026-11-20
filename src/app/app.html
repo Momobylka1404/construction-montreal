@@ -1,9 +1,6 @@
-<a
-  class="skip-link"
-  [href]="i18n.sectionHref('contenu')"
-  (click)="scrollToSection($event, 'contenu')"
-  >{{ i18n.t().a11y.skipToContent }}</a
->
+<a class="skip-link" [href]="pageHref('accueil')" (click)="onNavigatePage($event, 'accueil')">{{
+  i18n.t().a11y.skipToContent
+}}</a>
 
 <app-site-header
   [isScrolled]="isScrolled()"
@@ -11,56 +8,24 @@
   [mobileMenuOpen]="mobileMenuOpen()"
   (toggleMenu)="toggleMobileMenu()"
   (closeMenu)="closeMobileMenu()"
-  (navigateSection)="onNavigateSection($event)"
+  (navigateSection)="onNavigateFromHeader($event)"
 />
 
 <main id="contenu" tabindex="-1">
-  <!-- Accueil — Présentation et message principal -->
-  <app-hero-section (navigateSection)="onNavigateSection($event)" />
-
-  <!-- Nos expertises — Tous les services proposés -->
-  <app-services-section (requestQuote)="requestQuoteForService($event)" />
-
-  <!-- Nos réalisations — Galerie de projets et photos -->
-  <app-realisations-section [(filter)]="realisationFilter" (openProject)="openLightbox($event)" />
-
-  <!-- Pourquoi nous choisir — Nos engagements et notre savoir-faire -->
-  <app-about-process-section (navigateSection)="onNavigateSection($event)" />
-
-  <!-- Avis clients — Témoignages -->
-  <app-reviews-section (requestQuote)="requestQuoteForService($event)" />
-
-  <!-- FAQ — Questions fréquentes -->
-  <app-faq-section />
-
-  <!-- Contact — Demande de devis et coordonnées -->
-  <app-contact-section [selectedService]="selectedService()" (openPrivacy)="openPrivacyModal()" />
+  <router-outlet />
 </main>
 
 <app-site-footer
-  (navigateSection)="onNavigateSection($event)"
-  (requestQuote)="requestQuoteForService($event)"
+  (navigateSection)="onNavigateFromFooter($event)"
+  (requestQuote)="onRequestQuote($event)"
   (openPrivacy)="openPrivacyModal()"
 />
 
-<router-outlet />
+<router-outlet name="modal" />
 
 @defer (when privacyModalOpen(); prefetch on idle) {
   @if (privacyModalOpen()) {
     <app-privacy-modal (close)="closePrivacyModal()" />
-  }
-}
-
-@defer (when activeRealisation() !== null; prefetch on idle) {
-  @if (activeRealisation(); as project) {
-    <app-lightbox-modal
-      [project]="project"
-      [index]="activeRealisationIndex()"
-      [total]="lightboxRealisations().length"
-      (close)="closeLightbox()"
-      (navigate)="navigateLightbox($event)"
-      (requestQuote)="requestQuoteForService($event)"
-    />
   }
 }
 

@@ -4,41 +4,33 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
 >
-  <!-- Version française (principale) — Montréal & Grand Montréal -->
+  <!-- FR — Accueil -->
   <url>
     <loc>https://momobylka1404.github.io/construction-montreal/</loc>
-    <lastmod>2026-11-18</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link
-      rel="alternate"
-      hreflang="fr-CA"
-      href="https://momobylka1404.github.io/construction-montreal/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="fr"
-      href="https://momobylka1404.github.io/construction-montreal/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="en-CA"
-      href="https://momobylka1404.github.io/construction-montreal/en/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="en"
-      href="https://momobylka1404.github.io/construction-montreal/en/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="x-default"
-      href="https://momobylka1404.github.io/construction-montreal/"
-    />
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/" />
     <image:image>
       <image:loc>https://momobylka1404.github.io/construction-montreal/images/hero-montreal.webp</image:loc>
       <image:title>180 Services à domicile — Construction, rénovation et entretien à Montréal</image:title>
     </image:image>
+  </url>
+  <!-- FR — Nos expertises -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/expertises/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/expertises/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/expertises/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/expertises/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/expertises/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/expertises/" />
     <image:image>
       <image:loc>https://momobylka1404.github.io/construction-montreal/images/service-construction.webp</image:loc>
       <image:title>Construction résidentielle à Montréal — 180 Services à domicile</image:title>
@@ -71,42 +63,154 @@
       <image:loc>https://momobylka1404.github.io/construction-montreal/images/service-paysagement.webp</image:loc>
       <image:title>Aménagement paysager résidentiel à Montréal — 180 Services à domicile</image:title>
     </image:image>
+  </url>
+  <!-- FR — Nos réalisations -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/realisations/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/realisations/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/realisations/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/realisations/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/realisations/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/realisations/" />
     <image:image>
       <image:loc>https://momobylka1404.github.io/construction-montreal/images/construction-apres.webp</image:loc>
       <image:title>Réalisation construction résidentielle après travaux à Montréal</image:title>
     </image:image>
   </url>
+  <!-- FR — Pourquoi nous choisir -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/pourquoi-nous/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/pourquoi-nous/" />
+  </url>
+  <!-- FR — Avis clients -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/avis/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/avis/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/avis/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/avis/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/avis/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/avis/" />
+  </url>
+  <!-- FR — FAQ -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/faq/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/faq/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/faq/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/faq/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/faq/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/faq/" />
+  </url>
+  <!-- FR — Contact -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/contact/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/contact/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/contact/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/contact/" />
+  </url>
 
-  <!-- English version — Montreal & Greater Montreal -->
+  <!-- EN — Home -->
   <url>
     <loc>https://momobylka1404.github.io/construction-montreal/en/</loc>
-    <lastmod>2026-11-18</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <xhtml:link
-      rel="alternate"
-      hreflang="fr-CA"
-      href="https://momobylka1404.github.io/construction-montreal/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="fr"
-      href="https://momobylka1404.github.io/construction-montreal/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="en-CA"
-      href="https://momobylka1404.github.io/construction-montreal/en/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="en"
-      href="https://momobylka1404.github.io/construction-montreal/en/"
-    />
-    <xhtml:link
-      rel="alternate"
-      hreflang="x-default"
-      href="https://momobylka1404.github.io/construction-montreal/"
-    />
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/" />
+  </url>
+  <!-- EN — Our Expertise -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/en/expertises/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/expertises/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/expertises/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/expertises/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/expertises/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/expertises/" />
+  </url>
+  <!-- EN — Our Projects -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/en/realisations/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/realisations/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/realisations/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/realisations/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/realisations/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/realisations/" />
+  </url>
+  <!-- EN — Why Choose Us -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/en/pourquoi-nous/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/pourquoi-nous/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/pourquoi-nous/" />
+  </url>
+  <!-- EN — Reviews -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/en/avis/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/avis/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/avis/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/avis/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/avis/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/avis/" />
+  </url>
+  <!-- EN — FAQ -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/en/faq/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/faq/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/faq/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/faq/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/faq/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/faq/" />
+  </url>
+  <!-- EN — Contact -->
+  <url>
+    <loc>https://momobylka1404.github.io/construction-montreal/en/contact/</loc>
+    <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://momobylka1404.github.io/construction-montreal/contact/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://momobylka1404.github.io/construction-montreal/contact/" />
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://momobylka1404.github.io/construction-montreal/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://momobylka1404.github.io/construction-montreal/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://momobylka1404.github.io/construction-montreal/contact/" />
   </url>
 </urlset>

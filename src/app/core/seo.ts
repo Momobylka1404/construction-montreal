@@ -1,11 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { getCanonicalPathForPage } from '../config/pages.config';
 import { SITE_CONFIG } from '../config/site.config';
 import { Lang, SiteContent, TRANSLATIONS } from '../i18n';
 
-export function getCanonicalUrl(lang: Lang): string {
-  return lang === 'en' ? `${SITE_CONFIG.siteUrl}/en/` : `${SITE_CONFIG.siteUrl}/`;
+export function getCanonicalUrl(lang: Lang, pageId = 'accueil'): string {
+  return getCanonicalPathForPage(pageId, lang, SITE_CONFIG.siteUrl);
 }
 
 export function getOgImageUrl(): string {
@@ -14,7 +15,7 @@ export function getOgImageUrl(): string {
 
 export function buildBusinessSchema(lang: Lang, content: SiteContent): Record<string, unknown> {
   const base = SITE_CONFIG.siteUrl;
-  const pageUrl = getCanonicalUrl(lang);
+  const pageUrl = getCanonicalUrl(lang, 'accueil');
   const isFr = lang === 'fr';
 
   return {
@@ -119,21 +120,51 @@ export class SeoService {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
 
-  sync(lang: Lang): void {
+  sync(lang: Lang, pageId = 'accueil'): void {
     const content = TRANSLATIONS[lang];
     const meta = content.meta;
-    const canonicalUrl = getCanonicalUrl(lang);
+    const canonicalUrl = getCanonicalUrl(lang, pageId);
     const ogImageUrl = getOgImageUrl();
+
+    // Titre spécifique à la page (ex: "Nos expertises | 180 Services ...")
+    const pageTitles: Record<string, { fr: string; en: string }> = {
+      accueil: { fr: content.meta.title, en: content.meta.title },
+      expertises: {
+        fr: `Nos expertises — ${content.brand.name} | ${content.brand.city}`,
+        en: `Our Expertise — ${content.brand.name} | ${content.brand.city}`,
+      },
+      realisations: {
+        fr: `Nos réalisations — ${content.brand.name} | ${content.brand.city}`,
+        en: `Our Projects — ${content.brand.name} | ${content.brand.city}`,
+      },
+      'pourquoi-nous': {
+        fr: `Pourquoi nous choisir — ${content.brand.name} | ${content.brand.city}`,
+        en: `Why Choose Us — ${content.brand.name} | ${content.brand.city}`,
+      },
+      avis: {
+        fr: `Avis clients — ${content.brand.name} | ${content.brand.city}`,
+        en: `Client Reviews — ${content.brand.name} | ${content.brand.city}`,
+      },
+      faq: {
+        fr: `FAQ — ${content.brand.name} | ${content.brand.city}`,
+        en: `FAQ — ${content.brand.name} | ${content.brand.city}`,
+      },
+      contact: {
+        fr: `Contact & Devis — ${content.brand.name} | ${content.brand.city}`,
+        en: `Contact & Quote — ${content.brand.name} | ${content.brand.city}`,
+      },
+    };
+    const pageTitle = pageTitles[pageId]?.[lang] ?? meta.title;
 
     if (this.doc.documentElement) {
       this.doc.documentElement.lang = meta.htmlLang;
     }
 
-    this.title.setTitle(meta.title);
+    this.title.setTitle(pageTitle);
 
     this.meta.updateTag({ name: 'description', content: meta.description });
     this.meta.updateTag({ name: 'keywords', content: meta.keywords });
-    this.meta.updateTag({ property: 'og:title', content: meta.ogTitle });
+    this.meta.updateTag({ property: 'og:title', content: pageTitle });
     this.meta.updateTag({ property: 'og:description', content: meta.ogDescription });
     this.meta.updateTag({ property: 'og:url', content: canonicalUrl });
     this.meta.updateTag({ property: 'og:locale', content: meta.ogLocale });
@@ -143,7 +174,7 @@ export class SeoService {
     });
     this.meta.updateTag({ property: 'og:image', content: ogImageUrl });
     this.meta.updateTag({ property: 'og:image:alt', content: meta.ogImageAlt });
-    this.meta.updateTag({ name: 'twitter:title', content: meta.ogTitle });
+    this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
     this.meta.updateTag({ name: 'twitter:description', content: meta.ogDescription });
     this.meta.updateTag({ name: 'twitter:image', content: ogImageUrl });
     this.meta.updateTag({ name: 'twitter:image:alt', content: meta.ogImageAlt });
@@ -156,6 +187,27 @@ export class SeoService {
         this.doc.head.appendChild(canonicalEl);
       }
       canonicalEl.setAttribute('href', canonicalUrl);
+
+      // hreflang alternates per page
+      const hreflangs: Array<{ lang: string; href: string }> = [
+        { lang: 'fr-CA', href: getCanonicalUrl('fr', pageId) },
+        { lang: 'fr', href: getCanonicalUrl('fr', pageId) },
+        { lang: 'en-CA', href: getCanonicalUrl('en', pageId) },
+        { lang: 'en', href: getCanonicalUrl('en', pageId) },
+        { lang: 'x-default', href: getCanonicalUrl('fr', pageId) },
+      ];
+      for (const h of hreflangs) {
+        let el = this.doc.head.querySelector<HTMLLinkElement>(
+          `link[rel="alternate"][hreflang="${h.lang}"]`,
+        );
+        if (!el) {
+          el = this.doc.createElement('link');
+          el.setAttribute('rel', 'alternate');
+          el.setAttribute('hreflang', h.lang);
+          this.doc.head.appendChild(el);
+        }
+        el.setAttribute('href', h.href);
+      }
     }
 
     const businessScript = this.doc.getElementById('schema-business');
